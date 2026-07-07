@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abdellah Taouil — Embedded Systems Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── TOKENS ────────────────────────────────────────────────── */
+    :root {
+      --bg:        #0a0a0f;
+      --bg2:       #10101a;
+      --bg3:       #15151f;
+      --surface:   #1a1a28;
+      --border:    #1e1e30;
+      --trace:     #00e87a;
+      --trace-dim: #00e87a22;
+      --purple:    #7c3aed;
+      --purple-dim:#7c3aed22;
+      --amber:     #f59e0b;
+      --text:      #e2e8f0;
+      --text-mid:  #94a3b8;
+      --text-dim:  #475569;
+      --sidebar-w: 56px;
+      --font-disp: 'Rajdhani', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    /* ─── RESET ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── CIRCUIT CANVAS (background) ──────────────────────────── */
+    #circuit-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .35;
+    }
+
+    /* ─── VERTICAL SIDEBAR ──────────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 0;
+    }
+
+    .sidebar-logo {
+      font-family: var(--font-disp);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--trace);
+      letter-spacing: 1px;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    .sidebar-logo::after {
+      content: '';
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--trace);
+      margin: 6px auto 0;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 44px; height: 52px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      position: relative;
+      gap: 3px;
+    }
+    .nav-item svg { width: 18px; height: 18px; stroke: var(--text-mid); transition: stroke .2s; }
+    .nav-item span {
+      font-family: var(--font-mono);
+      font-size: 7px;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      transition: color .2s;
+    }
+    .nav-item:hover, .nav-item.active {
+      background: var(--trace-dim);
+    }
+    .nav-item:hover svg, .nav-item.active svg { stroke: var(--trace); }
+    .nav-item:hover span, .nav-item.active span { color: var(--trace); }
+
+    /* tooltip */
+    .nav-item::before {
+      content: attr(data-label);
+      position: absolute;
+      left: calc(100% + 12px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s;
+    }
+    .nav-item:hover::before { opacity: 1; }
+
+    .sidebar-socials {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      width: 100%;
+    }
+    .sidebar-socials a {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px;
+      color: var(--text-dim);
+      transition: color .2s;
+    }
+    .sidebar-socials a:hover { color: var(--trace); }
+    .sidebar-socials a svg { width: 16px; height: 16px; }
+
+    /* ─── TOP BANNER ────────────────────────────────────────────── */
+    .top-banner {
+      position: fixed;
+      top: 0;
+      left: var(--sidebar-w);
+      right: 0;
+      height: 44px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      z-index: 99;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+
+    .banner-name {
+      font-family: var(--font-disp);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .banner-name span { color: var(--trace); }
+
+    .banner-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .banner-status {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-mid);
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--trace);
+      box-shadow: 0 0 6px var(--trace);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+
+    /* ─── MAIN CONTENT ──────────────────────────────────────────── */
+    .main {
+    width: 100%;
+    max-width: 1300px; /* Constrains the max width so it doesn't stretch infinitely on wide screens */
+    margin: 0 auto;    /* Centers the entire main container horizontally */
+    padding: 0 40px;   /* Optional: Adds a bit of safety padding on the sides for smaller screens */
+    box-sizing: border-box;
+    }
+
+    /* ─── SECTIONS ──────────────────────────────────────────────── */
+    .section {
+      min-height: 100vh;
+      padding: 80px 60px 80px 64px;
+      position: relative;
+    }
+    .section + .section { border-top: 1px solid var(--border); }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--trace);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-eyebrow::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 60px;
+      background: var(--trace);
+      opacity: .4;
+    }
+
+    .section-title {
+      font-family: var(--font-disp);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    /* ─── HOME ──────────────────────────────────────────────────── */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    .home-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .home-content {}
+    .home-greeting {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--trace);
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .home-name {
+      font-family: var(--font-disp);
+      font-size: clamp(48px, 6vw, 76px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .home-name .accent { color: var(--trace); }
+
+    .home-role {
+      font-family: var(--font-disp);
+      font-size: clamp(18px, 2.5vw, 26px);
+      font-weight: 500;
+      color: var(--text-mid);
+      margin-bottom: 28px;
+      letter-spacing: .5px;
+    }
+    .home-bio {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.75;
+      max-width: 480px;
+      margin-bottom: 40px;
+    }
+
+    .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 26px;
+      font-family: var(--font-disp);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+    }
+    .btn-primary {
+      background: var(--trace);
+      color: #000;
+    }
+    .btn-primary:hover { background: #00ff8a; box-shadow: 0 0 24px #00e87a55; }
+    .btn-outline {
+      background: transparent;
+      color: var(--trace);
+      border: 1px solid var(--trace);
+    }
+    .btn-outline:hover { background: var(--trace-dim); }
+
+    /* Photo card */
+    .home-photo-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .photo-frame {
+      position: relative;
+      width: 320px; height: 380px;
+    }
+    .photo-bg {
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--trace);
+      border-radius: 4px;
+      transform: translate(12px, 12px);
+      background: var(--trace-dim);
+    }
+    .photo-img {
+      position: relative;
+      width: 320px; height: 380px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .photo-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .photo-placeholder {
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      color: var(--text-dim);
+    }
+    .photo-placeholder svg { width: 48px; height: 48px; stroke: var(--text-dim); }
+    .photo-placeholder span { font-family: var(--font-mono); font-size: 11px; }
+
+    /* Corner decorations */
+    .corner {
+      position: absolute;
+      width: 16px; height: 16px;
+      border-color: var(--trace);
+      border-style: solid;
+    }
+    .corner-tl { top: -6px; left: -6px; border-width: 2px 0 0 2px; }
+    .corner-tr { top: -6px; right: -6px; border-width: 2px 2px 0 0; }
+    .corner-bl { bottom: -6px; left: -6px; border-width: 0 0 2px 2px; }
+    .corner-br { bottom: -6px; right: -6px; border-width: 0 2px 2px 0; }
+
+    /* ─── ABOUT ─────────────────────────────────────────────────── */
+    #about { min-height: auto; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: 1100px;
+    }
+    .about-text p { color: var(--text-mid); line-height: 1.8; margin-bottom: 16px; font-size: 15px; }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text strong { color: var(--text); }
+
+    .about-specs {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .spec-row {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 20px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+    .spec-row:first-child { border-top: 1px solid var(--border); }
+    .spec-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--trace);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding-top: 2px;
+    }
+    .spec-value {
+      font-size: 14px;
+      color: var(--text-mid);
+    }
+    .spec-value strong { color: var(--text); }
+
+    /* ─── EDUCATION ─────────────────────────────────────────────── */
+    #education { min-height: auto; }
+    .timeline {
+      max-width: 800px;
+      position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 15px; top: 8px; bottom: 8px;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--trace), transparent);
+      opacity: .4;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 24px;
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .timeline-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--trace);
+      border: 2px solid var(--bg);
+      outline: 1px solid var(--trace);
+      margin-top: 8px;
+      position: relative;
+      z-index: 1;
+      align-self: start;
+      justify-self: center;
+      box-shadow: 0 0 8px var(--trace);
+    }
+
+    .timeline-content {}
+    .timeline-period {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+    }
+    .timeline-school {
+      font-family: var(--font-disp);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .timeline-degree {
+      font-size: 14px;
+      color: var(--trace);
+      margin-bottom: 4px;
+    }
+    .timeline-location {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* ─── EXPERIENCE ────────────────────────────────────────────── */
+    #experience { min-height: auto; }
+    .exp-list { max-width: 860px; display: flex; flex-direction: column; gap: 32px; }
+    .exp-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 28px 32px;
+      position: relative;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .exp-card:hover {
+      border-color: var(--trace);
+      box-shadow: 0 0 24px var(--trace-dim);
+    }
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      gap: 20px;
+    }
+    .exp-title { font-family: var(--font-disp); font-size: 20px; font-weight: 600; color: var(--text); }
+    .exp-company { font-size: 14px; color: var(--purple); margin-top: 2px; }
+    .exp-meta { text-align: right; flex-shrink: 0; }
+    .exp-period {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+    .exp-location {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+    .exp-bullets { padding-left: 0; list-style: none; }
+    .exp-bullets li {
+      font-size: 14px;
+      color: var(--text-mid);
+      padding: 4px 0;
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.7;
+    }
+    .exp-bullets li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--trace);
+      font-size: 12px;
+    }
+
+    /* ─── PROJECTS ──────────────────────────────────────────────── */
+    #projects {}
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+    }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      position: relative;
+    }
+    .project-card:hover {
+      border-color: var(--trace);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px var(--trace-dim);
+    }
+
+    .project-img {
+      width: 100%;
+      height: 160px;
+      background: var(--bg3);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .project-img-placeholder {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .project-img-placeholder svg { width: 36px; height: 36px; stroke: var(--text-dim); }
+    .project-img-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* PCB grid pattern inside project image */
+    .project-img::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: .5;
+    }
+
+    .project-body { padding: 20px 22px; }
+    .project-number {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--trace);
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+    .project-title {
+      font-family: var(--font-disp);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .project-excerpt {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.6;
+      margin-bottom: 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--trace);
+      background: var(--trace-dim);
+      border: 1px solid var(--trace);
+      border-opacity: .3;
+      padding: 3px 8px;
+      border-radius: 2px;
+      letter-spacing: .5px;
+    }
+
+    /* ─── SKILLS ────────────────────────────────────────────────── */
+    #skills { min-height: auto; }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+    }
+    .skill-category {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 22px 24px;
+      transition: border-color .2s;
+    }
+    .skill-category:hover { border-color: var(--purple); }
+    .skill-cat-icon {
+      width: 36px; height: 36px;
+      background: var(--purple-dim);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .skill-cat-icon svg { width: 18px; height: 18px; stroke: var(--purple); }
+    .skill-cat-title {
+      font-family: var(--font-disp);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .skill-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .skill-chip {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-mid);
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+
+    /* ─── CONTACT ───────────────────────────────────────────────── */
+    #contact { min-height: auto; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: 1000px;
+      align-items: start;
+    }
+    .contact-intro {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+    .contact-items { display: flex; flex-direction: column; gap: 16px; }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .contact-icon {
+      width: 40px; height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      background: var(--bg2);
+    }
+    .contact-icon svg { width: 18px; height: 18px; stroke: var(--trace); }
+    .contact-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .contact-val {
+      font-size: 14px;
+      color: var(--text);
+    }
+    .contact-val a { color: var(--trace); }
+    .contact-val a:hover { text-decoration: underline; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .form-input {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s;
+      width: 100%;
+    }
+    .form-input:focus { border-color: var(--trace); }
+    textarea.form-input { min-height: 110px; resize: vertical; }
+    .btn-send {
+      background: var(--trace);
+      color: #000;
+      font-family: var(--font-disp);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border: none;
+      border-radius: 4px;
+      padding: 11px 24px;
+      cursor: pointer;
+      transition: all .2s;
+      align-self: flex-start;
+    }
+    .btn-send:hover { background: #00ff8a; box-shadow: 0 0 20px #00e87a44; }
+
+    /* ─── FOOTER ────────────────────────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-text {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .footer-text span { color: var(--trace); }
+
+    /* ─── PROJECT MODAL ─────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.8);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 85vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: transform .25s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-img {
+      width: 100%;
+      height: 200px;
+      background: var(--bg3);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-img::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: .5;
+    }
+    .modal-img-icon { position: relative; z-index: 1; }
+    .modal-img-icon svg { width: 48px; height: 48px; stroke: var(--trace); opacity: .5; }
+    .modal-body { padding: 28px 32px; }
+    .modal-number {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--trace);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .modal-title {
+      font-family: var(--font-disp);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .modal-desc {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+    .modal-desc ul { padding-left: 18px; margin-top: 8px; }
+    .modal-desc ul li { margin-bottom: 6px; }
+    .modal-section-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    .modal-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .modal-close {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-dim);
+      font-size: 18px;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+    }
+    .modal-close:hover { color: var(--text); border-color: var(--text-dim); }
+    .modal-header-wrap { position: relative; }
+
+    /* ─── SCROLL REVEAL ─────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .5s ease, transform .5s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ─── RESPONSIVE ────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .home-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .home-photo-wrap { display: none; }
+      .section { padding: 60px 24px 60px 28px; }
+      .top-banner { padding: 0 16px; }
+      .banner-tag { display: none; }
+      .footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- BACKGROUND CIRCUIT CANVAS -->
+<canvas id="circuit-canvas"></canvas>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">A.</div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" data-section="home" data-label="Home" onclick="scrollTo('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
+        <path d="M9 21V12h6v9"/>
+      </svg>
+      <span>Home</span>
+    </div>
+    <div class="nav-item" data-section="about" data-label="About" onclick="scrollTo('about')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+      </svg>
+      <span>About</span>
+    </div>
+    <div class="nav-item" data-section="education" data-label="Education" onclick="scrollTo('education')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12.5v5c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5"/>
+      </svg>
+      <span>Edu.</span>
+    </div>
+    <div class="nav-item" data-section="experience" data-label="Experience" onclick="scrollTo('experience')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+        <line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/>
+      </svg>
+      <span>Exp.</span>
+    </div>
+    <div class="nav-item" data-section="projects" data-label="Projects" onclick="scrollTo('projects')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+      </svg>
+      <span>Proj.</span>
+    </div>
+    <div class="nav-item" data-section="skills" data-label="Skills" onclick="scrollTo('skills')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+      <span>Skills</span>
+    </div>
+    <div class="nav-item" data-section="contact" data-label="Contact" onclick="scrollTo('contact')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+      </svg>
+      <span>Contact</span>
+    </div>
+  </nav>
+  <div class="sidebar-socials">
+    <a href="https://linkedin.com/in/abdellah-taouil-5a023321b/" target="_blank" title="LinkedIn">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/>
+        <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+      </svg>
+    </a>
+    <a href="https://github.com/abdelah202" target="_blank" title="GitHub">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
+      </svg>
+    </a>
+    <a href="mailto:abdelahtaouil@gmail.com" title="Email">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+    </a>
+  </div>
+</aside>
+
+<!-- TOP BANNER -->
+<header class="top-banner">
+  <div class="banner-name">TAOUIL <span>Abdellah</span></div>
+  <div class="banner-tag">// embedded-systems · fpga · mobile</div>
+  <div class="banner-status">
+    <span class="status-dot"></span>
+    Available Jan 2027
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ══ HOME ══════════════════════════════════════════════════════ -->
+  <section class="section" id="home">
+    <div class="home-grid">
+      <div class="home-content reveal">
+        <div class="home-greeting">// Hello, world — I'm</div>
+        <h1 class="home-name">Abdellah<br><span class="accent">Taouil<span style="color:var(--trace);">.</span></span></h1>
+        <p class="home-role">Embedded Systems Engineer</p>
+        <p class="home-bio">
+          4th-year engineering student specializing in computer science and embedded electronic systems. I bridge the gap between hardware and software — from FPGA digital design in VHDL to full-stack mobile applications that communicate with microcontrollers over NFC, BLE, and CAN.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" onclick="scrollTo('projects')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            View Projects
+          </a>
+          <a class="btn btn-outline" onclick="scrollTo('contact')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Contact Me
+          </a>
+        </div>
+      </div>
+      <div class="home-photo-wrap reveal">
+        <div class="photo-frame">
+          <div class="photo-bg"></div>
+          <div class="photo-img">
+            <!-- Replace the src below with your actual photo path -->
+            <div class="photo-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="5"/><path d="M3 21c0-5 4-9 9-9s9 4 9 9"/>
+              </svg>
+              <span>Add your photo here</span>
+            </div>
+          </div>
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ABOUT ═════════════════════════════════════════════════════ -->
+  <section class="section" id="about">
+    <div class="section-eyebrow">01 // about</div>
+    <h2 class="section-title">Who I Am</h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          I'm <strong>Abdellah Taouil</strong>, a 4th-year engineering student pursuing a double degree in Computer Science and Embedded Electronic Systems at <strong>Polytech Grenoble INP</strong>, University of Grenoble Alpes — after completing two years of engineering studies in Embedded Systems and Digital Services at the <strong>National Institute of Posts and Telecommunications</strong> in Rabat.
+        </p>
+        <p>
+          My passion sits at the intersection of <strong>hardware and software</strong>. I'm equally comfortable writing VHDL for an FPGA timing-critical block and building a production-grade Android application in Flutter that communicates with it. That dual fluency is what drives me.
+        </p>
+        <p>
+          I've had the chance to apply these skills in real environments: designing an <strong>NFC-based OTA firmware update system</strong> for STM32 devices at Multitel (Belgium), implementing a <strong>digital PLL for IoT backscattering</strong> at TIMA Laboratory (Grenoble), and working on <strong>AI-based battery estimation</strong> for electric vehicles at Segula Technologies.
+        </p>
+        <p>
+          Outside of engineering, I've led a robotics club, competed in robotics competitions, and enjoy staying curious through travel and fitness. I'm trilingual — Arabic, French, and English — which helps me collaborate in international teams and adapt quickly to new environments.
+        </p>
+      </div>
+      <div class="about-specs reveal">
+        <div class="spec-row">
+          <div class="spec-label">Status</div>
+          <div class="spec-value"><strong>Seeking 6-month internship</strong><br>Starting January 2027</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-label">Based in</div>
+          <div class="spec-value">Grenoble, France 🇫🇷</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-label">Focus</div>
+          <div class="spec-value">FPGA Design, Embedded Software, Mobile Dev</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-label">Languages</div>
+          <div class="spec-value">Arabic · French · English</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-label">Interests</div>
+          <div class="spec-value">Robotics · HDL/HLS · Hardware-Software Co-design</div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-label">License</div>
+          <div class="spec-value">Permis B (France)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ EDUCATION ═════════════════════════════════════════════════ -->
+  <section class="section" id="education">
+    <div class="section-eyebrow">02 // education</div>
+    <h2 class="section-title">Academic Path</h2>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-period">Sept. 2025 — Jul. 2027</div>
+          <div class="timeline-school">Polytech Grenoble INP</div>
+          <div class="timeline-degree">Double Degree — Computer Science & Embedded Electronic Systems Engineering</div>
+          <div class="timeline-location">University of Grenoble Alpes · Grenoble, France</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-period">Sept. 2023 — Jun. 2025</div>
+          <div class="timeline-school">INPT — National Institute of Posts and Telecommunications</div>
+          <div class="timeline-degree">Engineering in Embedded Systems and Digital Services</div>
+          <div class="timeline-location">Rabat, Morocco</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-period">Sept. 2021 — Jul. 2023</div>
+          <div class="timeline-school">CPGE Lycée Mohammed V</div>
+          <div class="timeline-degree">Preparatory Classes for Engineering Schools — MPSI/MP</div>
+          <div class="timeline-location">Casablanca, Morocco</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ EXPERIENCE ════════════════════════════════════════════════ -->
+  <section class="section" id="experience">
+    <div class="section-eyebrow">03 // experience</div>
+    <h2 class="section-title">Work Experience</h2>
+    <div class="exp-list">
+
+      <div class="exp-card reveal">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">NFC-based Firmware Update for STM32 Devices</div>
+            <div class="exp-company">Multitel — Innovation Centre</div>
+          </div>
+          <div class="exp-meta">
+            <div class="exp-period">Apr. 2026 — Sept. 2026</div>
+            <div class="exp-location">Mons, Belgium</div>
+          </div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Designed and implemented a firmware update solution over NFC for STM32-based embedded systems, ensuring reliable and secure update delivery.</li>
+          <li>Developed an Android application (Flutter) and contributed to a centralized update management system for version control and deployment handling.</li>
+        </ul>
+      </div>
+
+      <div class="exp-card reveal">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">Digital PLL Design for Sustainable IoT</div>
+            <div class="exp-company">TIMA Laboratory — University of Grenoble Alpes</div>
+          </div>
+          <div class="exp-meta">
+            <div class="exp-period">Oct. 2025 — Mar. 2026</div>
+            <div class="exp-location">Grenoble, France</div>
+          </div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Designed and implemented a digital Phase-Locked Loop (PLL) for IoT backscattering systems.</li>
+          <li>Conducted control-loop analysis and Verilog-based optimization targeting low power and reduced hardware footprint.</li>
+        </ul>
+      </div>
+
+      <div class="exp-card reveal">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">System Development & Validation Internship</div>
+            <div class="exp-company">Segula Technologies Maroc Africa</div>
+          </div>
+          <div class="exp-meta">
+            <div class="exp-period">Jul. 2025 — Aug. 2025</div>
+            <div class="exp-location">Casablanca, Morocco</div>
+          </div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Developed Battery State-of-Charge estimation models for Electric Vehicles using AI-based filters (EKF, UKF, Neural Networks) in Simulink.</li>
+          <li>Worked within a Model-Based Systems Engineering (MBSE) workflow for system validation and documentation.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ PROJECTS ═══════════════════════════════════════════════════ -->
+  <section class="section" id="projects">
+    <div class="section-eyebrow">04 // projects</div>
+    <h2 class="section-title">Featured Work</h2>
+    <div class="projects-grid">
+
+      <div class="project-card reveal" onclick="openModal(0)">
+        <div class="project-img">
+          <div class="project-img-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M9 17h6"/></svg>
+            <div class="project-img-label">RISC-V · VHDL</div>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="project-number">// PROJ_01</div>
+          <div class="project-title">32-bit RISC-V Processor in VHDL</div>
+          <div class="project-excerpt">Full RV32I processor implementation with modular functional units, ALU, register file, and simulation-based validation.</div>
+          <div class="project-tags">
+            <span class="tag">VHDL</span><span class="tag">SystemVerilog</span><span class="tag">RISC-V</span><span class="tag">Quartus</span><span class="tag">ModelSim</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" onclick="openModal(1)">
+        <div class="project-img">
+          <div class="project-img-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3l-4 4-4-4"/><circle cx="12" cy="14" r="2"/></svg>
+            <div class="project-img-label">FPGA · SoC · NIOS II</div>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="project-number">// PROJ_02</div>
+          <div class="project-title">SoC Synthesis & Smartwatch</div>
+          <div class="project-excerpt">NIOS II soft-core processor synthesized on Altera DE1 FPGA via SoPC Builder, running timer and clock applications.</div>
+          <div class="project-tags">
+            <span class="tag">FPGA</span><span class="tag">VHDL</span><span class="tag">NIOS II</span><span class="tag">QSys</span><span class="tag">Embedded C</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" onclick="openModal(2)">
+        <div class="project-img">
+          <div class="project-img-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 8v4l3 3"/></svg>
+            <div class="project-img-label">NFC · STM32 · Flutter</div>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="project-number">// PROJ_03</div>
+          <div class="project-title">NFC OTA Firmware Update System</div>
+          <div class="project-excerpt">End-to-end OTA update pipeline: FastAPI backend, Flutter Android client, and STM32 bootloader communicating over ST25DV NFC.</div>
+          <div class="project-tags">
+            <span class="tag">STM32</span><span class="tag">NFC</span><span class="tag">Flutter</span><span class="tag">FastAPI</span><span class="tag">Embedded C</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" onclick="openModal(3)">
+        <div class="project-img">
+          <div class="project-img-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+            <div class="project-img-label">ESP32 · AI · Sensors</div>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="project-number">// PROJ_04</div>
+          <div class="project-title">Anomaly Detection — Industry 4.0</div>
+          <div class="project-excerpt">Robotic arm monitoring with sensor fusion and Random Forest-based early failure detection.</div>
+          <div class="project-tags">
+            <span class="tag">ESP32</span><span class="tag">Raspberry Pi</span><span class="tag">Python</span><span class="tag">Random Forest</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" onclick="openModal(4)">
+        <div class="project-img">
+          <div class="project-img-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <div class="project-img-label">ESP32 · IoT · Cloud</div>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="project-number">// PROJ_05</div>
+          <div class="project-title">IoT Smart Agriculture System</div>
+          <div class="project-excerpt">Real-time environment monitoring with automated actuation control via mobile dashboard and cloud IoT integration.</div>
+          <div class="project-tags">
+            <span class="tag">ESP32</span><span class="tag">Sensors</span><span class="tag">Blynk</span><span class="tag">Cloud IoT</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ SKILLS ════════════════════════════════════════════════════ -->
+  <section class="section" id="skills">
+    <div class="section-eyebrow">05 // skills</div>
+    <h2 class="section-title">Technical Stack</h2>
+    <div class="skills-grid">
+
+      <div class="skill-category reveal">
+        <div class="skill-cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="skill-cat-title">Languages</div>
+        <div class="skill-items">
+          <span class="skill-chip">VHDL</span><span class="skill-chip">Verilog</span><span class="skill-chip">Embedded C</span><span class="skill-chip">Assembly</span><span class="skill-chip">Python</span><span class="skill-chip">Dart</span>
+        </div>
+      </div>
+
+      <div class="skill-category reveal">
+        <div class="skill-cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
+        </div>
+        <div class="skill-cat-title">Embedded Platforms</div>
+        <div class="skill-items">
+          <span class="skill-chip">FPGA</span><span class="skill-chip">SoC / Zynq</span><span class="skill-chip">STM32</span><span class="skill-chip">ESP32</span><span class="skill-chip">PIC18</span><span class="skill-chip">Raspberry Pi</span><span class="skill-chip">Arduino</span>
+        </div>
+      </div>
+
+      <div class="skill-category reveal">
+        <div class="skill-cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="skill-cat-title">EDA & Simulation</div>
+        <div class="skill-items">
+          <span class="skill-chip">Quartus Prime</span><span class="skill-chip">ModelSim</span><span class="skill-chip">Vivado</span><span class="skill-chip">QSys</span><span class="skill-chip">Proteus</span><span class="skill-chip">ORCAD PSpice</span>
+        </div>
+      </div>
+
+      <div class="skill-category reveal">
+        <div class="skill-cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="skill-cat-title">Protocols</div>
+        <div class="skill-items">
+          <span class="skill-chip">SPI</span><span class="skill-chip">I2C</span><span class="skill-chip">UART</span><span class="skill-chip">CAN</span><span class="skill-chip">NFC / ISO 15693</span><span class="skill-chip">BLE</span><span class="skill-chip">AXI4-Lite</span>
+        </div>
+      </div>
+
+      <div class="skill-category reveal">
+        <div class="skill-cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="skill-cat-title">Dev Tools & Environments</div>
+        <div class="skill-items">
+          <span class="skill-chip">STM32CubeIDE</span><span class="skill-chip">Android Studio</span><span class="skill-chip">MPLAB X</span><span class="skill-chip">Git / GitHub</span><span class="skill-chip">Simulink</span><span class="skill-chip">Jupyter</span>
+        </div>
+      </div>
+
+      <div class="skill-category reveal">
+        <div class="skill-cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        </div>
+        <div class="skill-cat-title">Mobile & Backend</div>
+        <div class="skill-items">
+          <span class="skill-chip">Flutter / Dart</span><span class="skill-chip">FastAPI</span><span class="skill-chip">SQLite</span><span class="skill-chip">REST APIs</span><span class="skill-chip">Android</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ CONTACT ════════════════════════════════════════════════════ -->
+  <section class="section" id="contact">
+    <div class="section-eyebrow">06 // contact</div>
+    <h2 class="section-title">Get In Touch</h2>
+    <div class="contact-grid">
+      <div>
+        <p class="contact-intro">
+          I'm actively looking for a <strong>6-month internship starting January 2027</strong> in embedded systems, digital design, or hardware-software co-design. If you're working on interesting problems at the silicon-software boundary, let's talk.
+        </p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">Email</div>
+              <div class="contact-val"><a href="mailto:abdelahtaouil@gmail.com">abdelahtaouil@gmail.com</a></div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.07 6.07l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">Phone</div>
+              <div class="contact-val">+33 6 52 82 58 96</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">LinkedIn</div>
+              <div class="contact-val"><a href="https://linkedin.com/in/abdellah-taouil-5a023321b/" target="_blank">abdellah-taouil</a></div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">GitHub</div>
+              <div class="contact-val"><a href="https://github.com/abdelah202" target="_blank">github.com/abdelah202</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form reveal">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-input" placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" placeholder="your@email.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-input" placeholder="Tell me about your project or opportunity..."></textarea>
+        </div>
+        <button class="btn-send" onclick="handleSend()">Send Message →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-text">© 2026 <span>Abdellah Taouil</span> — Built with ♥ for hardware &amp; software</div>
+    <div class="footer-text" style="font-size:10px;">// Grenoble, France · Available Jan 2027</div>
+  </footer>
+
+</main>
+
+<!-- PROJECT MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header-wrap">
+      <div class="modal-img" id="modal-img">
+        <div class="modal-img-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" id="modal-icon"><rect x="2" y="3" width="20" height="14" rx="2"/></svg></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-number" id="modal-num"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-desc" id="modal-desc"></div>
+      <div class="modal-section-title">Technologies Used</div>
+      <div class="modal-tags" id="modal-tags"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── PROJECT DATA ────────────────────────────────────────────── */
+const projects = [
+  {
+    num: 'PROJ_01',
+    title: '32-bit RISC-V Processor Design in VHDL',
+    desc: `<p>A complete implementation of the RV32I base instruction set architecture in VHDL, targeting FPGA deployment via Quartus Prime.</p>
+           <ul>
+             <li>Designed and implemented a fully functional RV32I processor supporting all core RISC-V base instructions.</li>
+             <li>Modular design approach: separate functional units including ALU, control unit, register file, memory blocks (instruction and data), and program counter.</li>
+             <li>Full simulation-based validation using ModelSim with directed testbenches covering edge cases and instruction sequences.</li>
+             <li>SystemVerilog used for testbench infrastructure; VHDL for all RTL design.</li>
+           </ul>`,
+    tags: ['VHDL', 'SystemVerilog', 'RISC-V', 'Quartus Prime', 'ModelSim', 'RTL Design']
+  },
+  {
+    num: 'PROJ_02',
+    title: 'SoC Synthesis & Smartwatch Programming on FPGA',
+    desc: `<p>End-to-end synthesis of a System-on-Chip running a soft-core NIOS II processor on the Altera DE1 FPGA board, then programming embedded applications on it.</p>
+           <ul>
+             <li>Used Altera SoPC Builder (QSys) to instantiate and connect the NIOS II processor with on-chip memory, PIO peripherals, and timer modules.</li>
+             <li>Synthesized the complete SoC using Quartus Prime and programmed it onto the DE1 FPGA via JTAG.</li>
+             <li>Developed timer and digital clock firmware in Embedded C running directly on the NIOS II architecture.</li>
+             <li>Demonstrated hardware-software co-design by modifying both the hardware platform and the firmware to add features.</li>
+           </ul>`,
+    tags: ['FPGA', 'VHDL', 'NIOS II', 'QSys', 'Embedded C', 'Quartus Prime', 'Altera DE1']
+  },
+  {
+    num: 'PROJ_03',
+    title: 'NFC OTA Firmware Update System for STM32',
+    desc: `<p>A full-stack firmware update pipeline enabling over-the-air updates to STM32 microcontrollers via NFC, eliminating the need for physical programming tools.</p>
+           <ul>
+             <li>STM32 bootloader with A/B dual-slot architecture (ping-pong), using flash memory layout and Boot Control Block (BCB) for reliable update triggering via NVIC_SystemReset().</li>
+             <li>ST25DV NFC tag communication using the Fast Transfer Mode (FTM) mailbox protocol over I2C.</li>
+             <li>Android Flutter application that manages NFC sessions, packages firmware frames according to a custom 32-byte little-endian format, and handles STM32-compatible CRC32 (poly 0x04C11DB7).</li>
+             <li>FastAPI + SQLite backend for centralized firmware version management and deployment.</li>
+             <li>Dart models mirroring STM32 C structs for binary-compatible frame generation.</li>
+           </ul>`,
+    tags: ['STM32', 'NFC', 'ST25DV', 'Flutter', 'Dart', 'FastAPI', 'SQLite', 'Embedded C', 'ISO 15693']
+  },
+  {
+    num: 'PROJ_04',
+    title: 'Anomaly Detection for Industry 4.0',
+    desc: `<p>A machine learning-based anomaly detection system monitoring a robotic arm using distributed edge computing across ESP32 and Raspberry Pi.</p>
+           <ul>
+             <li>Sensor network attached to a robotic arm for real-time motion tracking and vibration data collection.</li>
+             <li>Data acquisition on ESP32 nodes, forwarded to Raspberry Pi for ML inference.</li>
+             <li>Random Forest classifier trained on labeled normal/anomalous motion sequences for early failure detection.</li>
+             <li>Alert system triggered on anomaly detection, enabling predictive maintenance workflows.</li>
+           </ul>`,
+    tags: ['ESP32', 'Raspberry Pi', 'Python', 'Random Forest', 'scikit-learn', 'Sensors', 'Edge ML']
+  },
+  {
+    num: 'PROJ_05',
+    title: 'IoT-Based Smart Agriculture System',
+    desc: `<p>An autonomous smart agriculture monitoring system with real-time cloud connectivity and mobile control dashboard.</p>
+           <ul>
+             <li>Multi-sensor data acquisition (temperature, humidity, soil moisture, light) using ESP32 microcontrollers.</li>
+             <li>Cloud IoT integration via Blynk platform with real-time data streaming and threshold-based alerting.</li>
+             <li>Automated actuation control — irrigation pumps and ventilation — driven by sensor readings.</li>
+             <li>Mobile dashboard providing remote monitoring and manual override capability.</li>
+           </ul>`,
+    tags: ['ESP32', 'Sensors', 'Blynk', 'Cloud IoT', 'MQTT', 'Embedded C', 'Mobile']
+  }
+];
+
+function openModal(i) {
+  const p = projects[i];
+  document.getElementById('modal-num').textContent = '// ' + p.num;
+  document.getElementById('modal-title').textContent = p.title;
+  document.getElementById('modal-desc').innerHTML = p.desc;
+  const tagsEl = document.getElementById('modal-tags');
+  tagsEl.innerHTML = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ── SCROLL SPY ──────────────────────────────────────────────── */
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+const sections = ['home','about','education','experience','projects','skills','contact'];
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const nav = document.querySelector(`.nav-item[data-section="${e.target.id}"]`);
+      if (nav) nav.classList.add('active');
+    }
+  });
+}, { threshold: 0.3, rootMargin: '-44px 0px 0px 0px' });
+sections.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+
+/* ── SCROLL REVEAL ───────────────────────────────────────────── */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.1, rootMargin: '-20px' });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ── CIRCUIT CANVAS ──────────────────────────────────────────── */
+(function() {
+  const canvas = document.getElementById('circuit-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, nodes = [], traces = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    init();
+  }
+
+  function init() {
+    nodes = [];
+    traces = [];
+    const cols = Math.ceil(W / 80);
+    const rows = Math.ceil(H / 80);
+    for (let c = 0; c <= cols; c++) {
+      for (let r = 0; r <= rows; r++) {
+        if (Math.random() > .65) {
+          nodes.push({
+            x: c * 80 + (Math.random() - .5) * 20,
+            y: r * 80 + (Math.random() - .5) * 20,
+            r: Math.random() * 1.5 + 1,
+            pulse: Math.random() * Math.PI * 2
+          });
+        }
+      }
+    }
+    // Connect nearby nodes with L-shaped traces
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[j].x - nodes[i].x;
+        const dy = nodes[j].y - nodes[i].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 180 && Math.random() > .5) {
+          traces.push({ a: i, b: j, progress: Math.random(), speed: .001 + Math.random() * .003 });
+        }
+      }
+    }
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    const green = '#00e87a';
+
+    // Draw traces
+    traces.forEach(tr => {
+      const a = nodes[tr.a], b = nodes[tr.b];
+      // L-shaped: go horizontal then vertical
+      const midX = b.x;
+      const midY = a.y;
+
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(midX, midY);
+      ctx.lineTo(b.x, b.y);
+      ctx.strokeStyle = green + '18';
+      ctx.lineWidth = .8;
+      ctx.stroke();
+
+      // Animated dot along path
+      tr.progress += tr.speed;
+      if (tr.progress > 1) tr.progress = 0;
+      const p = tr.progress;
+      // Parametric position along L-shape
+      let px, py;
+      const total = Math.abs(b.x - a.x) + Math.abs(b.y - a.y);
+      const seg1 = Math.abs(b.x - a.x) / total;
+      if (p < seg1) {
+        const t2 = p / seg1;
+        px = a.x + (midX - a.x) * t2;
+        py = a.y;
+      } else {
+        const t2 = (p - seg1) / (1 - seg1);
+        px = midX;
+        py = midY + (b.y - midY) * t2;
+      }
+      ctx.beginPath();
+      ctx.arc(px, py, 2, 0, Math.PI * 2);
+      ctx.fillStyle = green + 'cc';
+      ctx.fill();
+    });
+
+    // Draw nodes
+    nodes.forEach(n => {
+      const pulse = Math.sin(t * .002 + n.pulse) * .5 + .5;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = green;
+      ctx.globalAlpha = .2 + pulse * .4;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(draw);
+})();
+
+/* ── CONTACT FORM ────────────────────────────────────────────── */
+function handleSend() {
+  const btn = document.querySelector('.btn-send');
+  btn.textContent = 'Message Sent ✓';
+  btn.style.background = '#10b981';
+  setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 3000);
+}
+</script>
+</body>
+</html>
