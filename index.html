@@ -178,56 +178,120 @@
     .sidebar-socials a svg { width: 16px; height: 16px; }
 
     /* ─── TOP BANNER ────────────────────────────────────────────── */
-    .top-banner {
-      position: fixed;
-      top: 0;
-      left: var(--sidebar-w);
-      right: 0;
-      height: 52px;
-      background: rgba(247,245,239,.9);
-      backdrop-filter: blur(6px);
-      border-bottom: 1px solid var(--border);
-      z-index: 99;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 32px;
-    }
+.top-banner {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-w);
+  right: 0;
+  height: 52px;
+  background: rgba(247,245,239,.9);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  gap: 20px;
+}
 
-    .banner-name {
-      font-family: var(--font-disp);
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--navy);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-    .banner-name span { color: var(--copper); }
+.banner-left {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  min-width: 0;
+}
+.banner-name {
+  font-family: var(--font-disp);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.banner-name span { color: var(--copper); }
+.banner-role {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  padding-left: 14px;
+  border-left: 1px solid var(--border);
+}
 
-    .banner-tag {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-dim);
-    }
-    .banner-status {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-mid);
-    }
-    .status-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--teal);
-      box-shadow: 0 0 6px var(--teal);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { opacity: 1; }
-      50% { opacity: .4; }
-    }
+.banner-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.lang-option { color: var(--text-dim); transition: color .2s; }
+.lang-option.active { color: var(--copper); font-weight: 600; }
+.lang-divider { color: var(--border-strong); }
+.lang-toggle:hover .lang-option:not(.active) { color: var(--text-mid); }
+
+.banner-socials {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 16px;
+  border-right: 1px solid var(--border);
+}
+.banner-socials a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  transition: color .2s;
+}
+.banner-socials a:hover { color: var(--copper); }
+.banner-socials a svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+}
+
+.banner-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-mid);
+  white-space: nowrap;
+}
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 6px var(--teal);
+  animation: pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+
+@media (max-width: 900px) {
+  .banner-role { display: none; }
+  .banner-status span:last-child { display: none; }  /* keeps just the dot on very small screens */
+}
 
     /* ─── MAIN CONTENT ──────────────────────────────────────────── */
     main {
@@ -642,6 +706,13 @@
       color: var(--text-dim);
       white-space: nowrap;
     }
+
+    .timeline-specialization {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--teal);
+  font-family: var(--font-body);
+}
  
     @media (max-width: 700px) {
       .timeline-item { grid-template-columns: 52px 1fr; padding: 18px 20px; gap: 16px; }
@@ -798,11 +869,10 @@
     #projects {}
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
       gap: 20px;
       max-width: 100%;
     }
-
     .project-card {
       background: var(--bg2);
       border: 1px solid var(--border);
@@ -818,17 +888,31 @@
       box-shadow: 0 10px 28px rgba(181,85,31,.1);
     }
 
+    /* FIX: wider aspect-ratio (more landscape, matches your diagrams)
+      and object-fit: contain instead of cover — this guarantees the
+      full image is always visible, never cropped, at any box width. */
     .project-img {
       width: 100%;
-      height: 150px;
+      aspect-ratio: 16 / 9;
       background: var(--bg3);
-      display: flex; align-items: center; justify-content: center;
       position: relative;
       overflow: hidden;
       border-bottom: 1px solid var(--border);
     }
+    .project-img img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      object-fit: contain;      /* shows the whole image, no cropping */
+      object-position: center;
+      display: block;
+    }
     .project-img-placeholder {
       display: flex; flex-direction: column; align-items: center; gap: 10px;
+      position: relative;
+      z-index: 1;
     }
     .project-img-placeholder svg { width: 34px; height: 34px; stroke: var(--text-dim); }
     .project-img-label {
@@ -838,8 +922,7 @@
       text-transform: uppercase;
       letter-spacing: 2px;
     }
-
-    /* PCB grid pattern inside project image */
+    /* PCB grid pattern — only show it when there's no real photo */
     .project-img::before {
       content: '';
       position: absolute;
@@ -849,6 +932,28 @@
         linear-gradient(90deg, var(--border) 1px, transparent 1px);
       background-size: 20px 20px;
       opacity: .6;
+      z-index: 0;
+    }
+    .project-img.has-photo::before { display: none; }
+
+    /* Modal image — same contain treatment so the enlarged view also
+      shows the complete diagram instead of a cropped version. */
+    .modal-img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--bg3);
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-img img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      z-index: 1;
     }
 
     .project-body { padding: 20px 22px; }
@@ -1016,39 +1121,82 @@
     #skills { min-height: auto; }
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
       max-width: 100%;
     }
+
     .skill-category {
       background: var(--bg2);
       border: 1px solid var(--border);
+      border-top: 3px solid var(--teal);
       border-radius: 6px;
-      padding: 22px 24px;
-      transition: border-color .2s;
+      padding: 24px 24px 22px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: border-color .2s, box-shadow .2s, transform .2s;
     }
-    .skill-category:hover { border-color: var(--teal); }
+    .skill-category:hover {
+      border-color: var(--teal);
+      border-top-color: var(--teal);
+      box-shadow: 0 10px 26px rgba(15,122,108,.1);
+      transform: translateY(-2px);
+    }
+    /* Alternate accent color per card for rhythm across the grid */
+    .skill-category.accent-copper { border-top-color: var(--copper); }
+    .skill-category.accent-copper:hover {
+      border-color: var(--copper);
+      border-top-color: var(--copper);
+      box-shadow: 0 10px 26px rgba(181,85,31,.1);
+    }
+    .skill-category.accent-copper .skill-cat-icon { background: var(--copper-dim); }
+    .skill-category.accent-copper .skill-cat-icon svg { stroke: var(--copper); }
+    .skill-category.accent-copper .skill-cat-count { color: var(--copper); border-color: var(--copper); background: var(--copper-dim); }
+
+    .skill-cat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
     .skill-cat-icon {
-      width: 36px; height: 36px;
+      width: 38px; height: 38px;
       background: var(--teal-dim);
       border-radius: 4px;
       display: flex; align-items: center; justify-content: center;
-      margin-bottom: 14px;
+      flex-shrink: 0;
     }
-    .skill-cat-icon svg { width: 18px; height: 18px; stroke: var(--teal); }
+    .skill-cat-icon svg { width: 19px; height: 19px; stroke: var(--teal); }
+
+    .skill-cat-count {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--teal);
+      background: var(--teal-dim);
+      border: 1px solid var(--teal);
+      padding: 2px 8px;
+      border-radius: 10px;
+      letter-spacing: .3px;
+      flex-shrink: 0;
+    }
+
     .skill-cat-title {
       font-family: var(--font-disp);
       font-size: 14px;
       font-weight: 600;
       color: var(--navy);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
     }
+
     .skill-items {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 7px;
+      margin-top: 0;
     }
     .skill-chip {
       font-family: var(--font-mono);
@@ -1056,8 +1204,19 @@
       color: var(--text-mid);
       background: var(--bg3);
       border: 1px solid var(--border);
-      padding: 4px 10px;
-      border-radius: 2px;
+      padding: 5px 11px;
+      border-radius: 3px;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .skill-category:not(.accent-copper) .skill-chip:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-dim);
+    }
+    .skill-category.accent-copper .skill-chip:hover {
+      border-color: var(--copper);
+      color: var(--copper);
+      background: var(--copper-dim);
     }
 
     /* ─── CONTACT ───────────────────────────────────────────────── */
@@ -1156,21 +1315,35 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       width: 100%;
-      max-width: 100%;
+      max-width: 680px;        /* FIX: was 100% — caps the dialog to a sane reading width instead of spanning the whole viewport */
       max-height: 85vh;
       overflow-y: auto;
       transform: translateY(20px);
       transition: transform .25s;
     }
     .modal-overlay.open .modal { transform: translateY(0); }
+
+    /* FIX: same aspect-ratio + contain treatment as the project cards,
+      so the modal photo is never cropped and scales cleanly at any
+      modal width. */
     .modal-img {
       width: 100%;
-      height: 190px;
+      aspect-ratio: 16 / 9;
       background: var(--bg3);
       display: flex; align-items: center; justify-content: center;
       position: relative;
       overflow: hidden;
       border-bottom: 1px solid var(--border);
+    }
+    .modal-img img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      z-index: 1;
+      display: block;
     }
     .modal-img::before {
       content: '';
@@ -1182,6 +1355,8 @@
       background-size: 20px 20px;
       opacity: .6;
     }
+    .modal-img.has-photo::before { display: none; }   /* FIX: hide the PCB grid pattern once a real photo is shown */
+
     .modal-img-icon { position: relative; z-index: 1; }
     .modal-img-icon svg { width: 44px; height: 44px; stroke: var(--copper); opacity: .6; }
     .modal-body { padding: 28px 32px; }
@@ -1231,7 +1406,7 @@
     }
     .modal-close:hover { color: var(--navy); border-color: var(--text-dim); }
     .modal-header-wrap { position: relative; }
-
+    
     /* ─── SCROLL REVEAL ─────────────────────────────────────────── */
     .reveal {
       opacity: 0;
@@ -1346,11 +1521,41 @@
 
 <!-- TOP BANNER -->
 <header class="top-banner">
-  <div class="banner-name">TAOUIL <span>Abdellah</span></div>
-  <div class="banner-tag">// embedded-systems · fpga · mobile</div>
-  <div class="banner-status">
-    <span class="status-dot"></span>
-    Available Jan 2027
+  <div class="banner-left">
+    <div class="banner-name">TAOUIL <span>Abdellah</span></div>
+    <div class="banner-role">Embedded Systems Engineer</div>
+  </div>
+
+  <div class="banner-right">
+    <button class="lang-toggle" id="lang-toggle" onclick="toggleLang()">
+      <span class="lang-option active" data-lang="en">EN</span>
+      <span class="lang-divider">/</span>
+      <span class="lang-option" data-lang="fr">FR</span>
+    </button>
+    <div class="banner-socials">
+      <a href="https://linkedin.com/in/abdellah-taouil-5a023321b/" target="_blank" title="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/>
+          <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+        </svg>
+      </a>
+      <a href="https://github.com/abdelah202" target="_blank" title="GitHub">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
+        </svg>
+      </a>
+      <a href="mailto:abdelahtaouil@gmail.com" title="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="banner-status">
+      <span class="status-dot"></span>
+      <span>Available Jan 2027</span>
+    </div>
   </div>
 </header>
 
@@ -1364,9 +1569,9 @@
       <div class="home-greeting">// Hello, world — I'm</div>
       <h1 class="home-name">Abdellah<br><span class="accent">Taouil<span style="color:var(--teal);">.</span></span></h1>
       <p class="home-role">Embedded Systems Engineer</p>
-      <p class="home-bio">
-        5th-year engineering student specializing in computer science and embedded electronic systems. I bridge the gap between hardware and software — from FPGA digital design in VHDL to full-stack mobile applications that communicate with microcontrollers over NFC, BLE, and CAN.
-      </p>
+      <p class="home-bio" 
+        data-en="Final year double-degree engineering student specializing in computer science and embedded systems. I develop end-to-end intelligent systems—from FPGA and embedded firmware to AI-powered and full-stack applications—transforming ideas into reliable, production-ready solutions." 
+        data-fr="Étudiant en dernière année de double diplôme d’ingénieur, spécialisé en informatique et systèmes embarqués. Je conçois des systèmes intelligents de bout en bout, allant des FPGA et des logiciels embarqués aux applications full-stack intégrant l’intelligence artificielle, en transformant des idées en solutions fiables et prêtes pour un déploiement en production."></p>
       <div class="cta-row">
         <button class="btn btn-primary" data-section="projects">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
@@ -1401,9 +1606,9 @@
             <img src="abdellah.png" alt="Abdellah Taouil">
           </div>
         </div>
-        <div class="photo-chip chip-1"><span class="dot"></span>STM32</div>
-        <div class="photo-chip chip-2"><span class="dot"></span>VHDL / FPGA</div>
-        <div class="photo-chip chip-3"><span class="dot"></span>Flutter</div>
+        <div class="photo-chip chip-1"><span class="dot"></span>Embedded FW</div>
+        <div class="photo-chip chip-2"><span class="dot"></span>RTL Design</div>
+        <div class="photo-chip chip-3"><span class="dot"></span>Companion Apps</div>
       </div>
     </div>
   </div>
@@ -1420,43 +1625,66 @@
     <div class="about-grid">
       <div class="about-text reveal">
         <p>
-          I'm <strong>Abdellah Taouil</strong>, a 5th-year engineering student pursuing a double degree in Computer Science and Embedded Electronic Systems at <strong>Polytech Grenoble INP</strong>, University of Grenoble Alpes — after completing two years of engineering studies in Embedded Systems and Digital Services at the <strong>National Institute of Posts and Telecommunications</strong> in Rabat.
+          My journey into <strong>embedded systems</strong> began in 2022, during my engineering preparatory studies, when the first generative AI models transformed the way we interact with technology. While many were fascinated by AI itself, I became curious about the systems that make it possible. I realized that every intelligent application ultimately depends on reliable hardware, and that's what led me to specialize in embedded systems—a choice I'm proud of every day.
         </p>
+
         <p>
-          My passion sits at the intersection of <strong>hardware and software</strong>. I'm equally comfortable writing VHDL for an FPGA timing-critical block and building a production-grade Android application in Flutter that communicates with it. That dual fluency is what drives me.
+          Today, I'm <strong>Abdellah Taouil</strong>, a 5th-year engineering student pursuing a double degree in <strong>Computer Science and Embedded Electronic Systems</strong> at <strong>Polytech Grenoble INP</strong>, University of Grenoble Alpes, after completing two years of engineering studies in Embedded Systems and Digital Services at the <strong>National Institute of Posts and Telecommunications (INPT)</strong> in Rabat.
         </p>
+
         <p>
-          I've had the chance to apply these skills in real environments: designing an <strong>NFC-based OTA firmware update system</strong> for STM32 devices at Multitel (Belgium), implementing a <strong>digital PLL for IoT backscattering</strong> at TIMA Laboratory (Grenoble), and working on <strong>AI-based battery estimation</strong> for electric vehicles at Segula Technologies.
+          I enjoy designing complete systems from idea to deployment, combining digital design, embedded firmware, AI, IoT, and modern software development. Whether developing FPGA architectures, programming STM32 microcontrollers, integrating Raspberry Pi-based vision systems, or building mobile and web applications that interact with embedded devices, I enjoy bridging hardware and software to create practical, production-ready solutions.
         </p>
+
         <p>
-          Outside of engineering, I've led a robotics club, competed in robotics competitions, and enjoy staying curious through travel and fitness. I'm trilingual — Arabic, French, and English — which helps me collaborate in international teams and adapt quickly to new environments.
+          Along the way, I've strengthened these skills through internships and research experiences in Belgium and France, leading the Robotics Cell at CESE INPT, participating in robotics competitions and hackathons and continuously learning through personal projects and professional certifications. Every experience has reinforced the same goal: transforming innovative ideas into reliable technologies that solve real-world problems.
         </p>
       </div>
       <div class="about-specs reveal">
+
         <div class="spec-row">
           <div class="spec-label">Status</div>
-          <div class="spec-value"><strong>Seeking 6-month internship</strong><br>Starting January 2027</div>
+          <div class="spec-value">
+            <strong>Seeking a 6-month internship</strong><br>
+            Available from January 2027
+          </div>
         </div>
+
         <div class="spec-row">
-          <div class="spec-label">Based in</div>
-          <div class="spec-value">Grenoble, France 🇫🇷</div>
+          <div class="spec-label">Location</div>
+          <div class="spec-value">
+            Grenoble, France · <strong>Open to opportunities across Europe</strong> 
+          </div>
         </div>
+
         <div class="spec-row">
           <div class="spec-label">Focus</div>
-          <div class="spec-value">FPGA Design, Embedded Software, Mobile Dev</div>
+          <div class="spec-value">
+            Embedded Systems · FPGA Design · AI & IoT
+          </div>
         </div>
+
         <div class="spec-row">
           <div class="spec-label">Languages</div>
-          <div class="spec-value">Arabic · French · English</div>
+          <div class="spec-value">
+            English (Professional) · French (Professional) · Arabic (Native)
+          </div>
         </div>
+
         <div class="spec-row">
           <div class="spec-label">Interests</div>
-          <div class="spec-value">Robotics · HDL/HLS · Hardware-Software Co-design</div>
+          <div class="spec-value">
+            Robotics · Computer Vision · Hardware–Software Co-design
+          </div>
         </div>
+
         <div class="spec-row">
-          <div class="spec-label">License</div>
-          <div class="spec-value">Permis B (France)</div>
+          <div class="spec-label">Driving License</div>
+          <div class="spec-value">
+            Category B
+          </div>
         </div>
+
       </div>
     </div>
   </section>
@@ -1470,13 +1698,20 @@
       <div class="timeline-item reveal">
         <div class="timeline-logo">
           <img src="logo_polytech.png" alt="Polytech Grenoble INP">
-          </div>
+        </div>
+
         <div class="timeline-content">
           <div class="timeline-top">
             <div>
               <div class="timeline-school">Polytech Grenoble INP</div>
-              <div class="timeline-degree">Double Degree — Computer Science & Embedded Electronic Systems Engineering</div>
+              <div class="timeline-degree">
+                Double Degree — Computer Science & Embedded Electronic Systems Engineering
+              </div>
+              <div class="timeline-specialization">
+                SUMMIT Program — Sustainable Microelectronics and Microsystems for Advanced Integrated Technologies
+              </div>
             </div>
+
             <div class="timeline-meta">
               <div class="timeline-period">Sept. 2025 — Jul. 2027</div>
               <div class="timeline-location">University of Grenoble Alpes · Grenoble, France</div>
@@ -1759,9 +1994,8 @@
 
       <div class="project-card reveal" onclick="openModal(0)">
         <div class="project-img">
-          <div class="project-img-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M9 17h6"/></svg>
-            <div class="project-img-label">RISC-V · VHDL</div>
+          <div class="project-img has-photo">
+            <img src="riscV.png" alt="32-bit RISC-V Processor in VHDL">
           </div>
         </div>
         <div class="project-body">
@@ -1775,12 +2009,8 @@
       </div>
 
       <div class="project-card reveal" onclick="openModal(1)">
-        <div class="project-img">
-          <div class="project-img-placeholder">
-            <img src="DE1_board.jpg" alt="SoC Synthesis">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3l-4 4-4-4"/><circle cx="12" cy="14" r="2"/></svg>
-            <div class="project-img-label">FPGA · SoC · NIOS II</div>
-          </div>
+        <div class="project-img has-photo">
+          <img src="digital_watch.png"SoC Synthesis & Smartwatch">
         </div>
         <div class="project-body">
           <div class="project-number">// PROJ_02</div>
@@ -1794,10 +2024,9 @@
 
       <div class="project-card reveal" onclick="openModal(2)">
         <div class="project-img">
-          <div class="project-img-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 8v4l3 3"/></svg>
-            <div class="project-img-label">NFC · STM32 · Flutter</div>
-          </div>
+          <div class="project-img has-photo">
+          <img src="nfc.jpg"SoC Synthesis & Smartwatch">
+        </div>
         </div>
         <div class="project-body">
           <div class="project-number">// PROJ_03</div>
@@ -1811,10 +2040,9 @@
 
       <div class="project-card reveal" onclick="openModal(3)">
         <div class="project-img">
-          <div class="project-img-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
-            <div class="project-img-label">ESP32 · AI · Sensors</div>
-          </div>
+          <div class="project-img has-photo">
+          <img src="anomalie.png"SoC Synthesis & Smartwatch">
+        </div>
         </div>
         <div class="project-body">
           <div class="project-number">// PROJ_04</div>
@@ -1828,10 +2056,9 @@
 
       <div class="project-card reveal" onclick="openModal(4)">
         <div class="project-img">
-          <div class="project-img-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            <div class="project-img-label">ESP32 · IoT · Cloud</div>
-          </div>
+          <div class="project-img has-photo">
+          <img src="blynk.png"SoC Synthesis & Smartwatch">
+        </div>
         </div>
         <div class="project-body">
           <div class="project-number">// PROJ_05</div>
@@ -1843,6 +2070,53 @@
         </div>
       </div>
 
+      <div class="project-card reveal" onclick="openModal(5)">
+        <div class="project-img">
+          <div class="project-img has-photo">
+            <img src="robonexus.png" alt="RoboNexus Platform">
+          </div>
+        </div>
+
+        <div class="project-body">
+          <div class="project-number">// PROJ_06</div>
+          <div class="project-title">RoboNexus – Smart Robot Marketplace & IoT Dashboard</div>
+          <div class="project-excerpt">
+            Full-stack web platform for robot customization, online purchasing, and real-time IoT monitoring through an interactive dashboard.
+          </div>
+
+          <div class="project-tags">
+            <span class="tag">Node.js</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">HTML/CSS</span>
+            <span class="tag">ESP32</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" onclick="openModal(6)">
+        <div class="project-img">
+          <div class="project-img has-photo">
+            <img src="luna.png" alt="Luna AI Smart Glasses">
+          </div>
+        </div>
+
+        <div class="project-body">
+          <div class="project-number">// PROJ_07</div>
+          <div class="project-title">Luna – AI Smart Glasses for the Visually Impaired</div>
+          <div class="project-excerpt">
+            Wearable embedded AI assistant combining computer vision, voice commands, and sensor fusion to assist visually impaired users with navigation and object localization.
+          </div>
+
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">YOLOv5</span>
+            <span class="tag">Raspberry Pi</span>
+            <span class="tag">Arduino</span>
+            <span class="tag">Computer Vision</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1926,74 +2200,179 @@
 
     </div>
   </section>
-  <!-- ══ SKILLS ════════════════════════════════════════════════════ -->
+  
+  <!-- ══ Skills ════════════════════════════════════════ -->
   <section class="section" id="skills">
-    <div class="section-eyebrow">07 // skills</div>
-    <h2 class="section-title">Technical Stack</h2>
-    <div class="skills-grid">
+  <div class="section-eyebrow">07 // skills</div>
+  <h2 class="section-title">Technical Stack</h2>
 
-      <div class="skill-category reveal">
+  <div class="skills-grid">
+
+    <!-- Languages -->
+    <div class="skill-category reveal">
+      <div class="skill-cat-header">
         <div class="skill-cat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
         </div>
-        <div class="skill-cat-title">Languages</div>
-        <div class="skill-items">
-          <span class="skill-chip">VHDL</span><span class="skill-chip">Verilog</span><span class="skill-chip">Embedded C</span><span class="skill-chip">Assembly</span><span class="skill-chip">Python</span><span class="skill-chip">Dart</span>
-        </div>
+        <span class="skill-cat-count">7</span>
       </div>
 
-      <div class="skill-category reveal">
-        <div class="skill-cat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
-        </div>
-        <div class="skill-cat-title">Embedded Platforms</div>
-        <div class="skill-items">
-          <span class="skill-chip">FPGA</span><span class="skill-chip">SoC / Zynq</span><span class="skill-chip">STM32</span><span class="skill-chip">ESP32</span><span class="skill-chip">PIC18</span><span class="skill-chip">Raspberry Pi</span><span class="skill-chip">Arduino</span>
-        </div>
-      </div>
+      <div class="skill-cat-title">Languages</div>
 
-      <div class="skill-category reveal">
-        <div class="skill-cat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-        </div>
-        <div class="skill-cat-title">EDA & Simulation</div>
-        <div class="skill-items">
-          <span class="skill-chip">Quartus Prime</span><span class="skill-chip">ModelSim</span><span class="skill-chip">Vivado</span><span class="skill-chip">QSys</span><span class="skill-chip">Proteus</span><span class="skill-chip">ORCAD PSpice</span>
-        </div>
+      <div class="skill-items">
+        <span class="skill-chip">Embedded C</span>
+        <span class="skill-chip">C++</span>
+        <span class="skill-chip">Assembly</span>
+        <span class="skill-chip">VHDL</span>
+        <span class="skill-chip">Verilog</span>
+        <span class="skill-chip">Python</span>
+        <span class="skill-chip">Dart</span>
       </div>
-
-      <div class="skill-category reveal">
-        <div class="skill-cat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
-        <div class="skill-cat-title">Protocols</div>
-        <div class="skill-items">
-          <span class="skill-chip">SPI</span><span class="skill-chip">I2C</span><span class="skill-chip">UART</span><span class="skill-chip">CAN</span><span class="skill-chip">NFC / ISO 15693</span><span class="skill-chip">BLE</span><span class="skill-chip">AXI4-Lite</span>
-        </div>
-      </div>
-
-      <div class="skill-category reveal">
-        <div class="skill-cat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <div class="skill-cat-title">Dev Tools & Environments</div>
-        <div class="skill-items">
-          <span class="skill-chip">STM32CubeIDE</span><span class="skill-chip">Android Studio</span><span class="skill-chip">MPLAB X</span><span class="skill-chip">Git / GitHub</span><span class="skill-chip">Simulink</span><span class="skill-chip">Jupyter</span>
-        </div>
-      </div>
-
-      <div class="skill-category reveal">
-        <div class="skill-cat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-        </div>
-        <div class="skill-cat-title">Mobile & Backend</div>
-        <div class="skill-items">
-          <span class="skill-chip">Flutter / Dart</span><span class="skill-chip">FastAPI</span><span class="skill-chip">SQLite</span><span class="skill-chip">REST APIs</span><span class="skill-chip">Android</span>
-        </div>
-      </div>
-
     </div>
-  </section>
+
+    <!-- Embedded -->
+    <div class="skill-category accent-copper reveal">
+      <div class="skill-cat-header">
+        <div class="skill-cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="4" width="16" height="16" rx="2"/>
+            <rect x="9" y="9" width="6" height="6"/>
+            <line x1="9" y1="2" x2="9" y2="4"/>
+            <line x1="15" y1="2" x2="15" y2="4"/>
+            <line x1="9" y1="20" x2="9" y2="22"/>
+            <line x1="15" y1="20" x2="15" y2="22"/>
+            <line x1="20" y1="9" x2="22" y2="9"/>
+            <line x1="20" y1="14" x2="22" y2="14"/>
+            <line x1="2" y1="9" x2="4" y2="9"/>
+            <line x1="2" y1="14" x2="4" y2="14"/>
+          </svg>
+        </div>
+
+        <span class="skill-cat-count">8</span>
+      </div>
+
+      <div class="skill-cat-title">Embedded Platforms</div>
+
+      <div class="skill-items">
+        <span class="skill-chip">ARM Cortex-M</span>
+        <span class="skill-chip">STM32</span>
+        <span class="skill-chip">ESP32</span>
+        <span class="skill-chip">PIC18</span>
+        <span class="skill-chip">FPGA</span>
+        <span class="skill-chip">Zynq SoC</span>
+        <span class="skill-chip">Raspberry Pi</span>
+        <span class="skill-chip">AVR / Arduino</span>
+      </div>
+    </div>
+
+    <!-- EDA -->
+    <div class="skill-category reveal">
+      <div class="skill-cat-header">
+        <div class="skill-cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <path d="M8 21h8M12 17v4"/>
+          </svg>
+        </div>
+
+        <span class="skill-cat-count">7</span>
+      </div>
+
+      <div class="skill-cat-title">EDA & Simulation</div>
+
+      <div class="skill-items">
+        <span class="skill-chip">Vivado</span>
+        <span class="skill-chip">Quartus Prime</span>
+        <span class="skill-chip">ModelSim</span>
+        <span class="skill-chip">QSys</span>
+        <span class="skill-chip">Proteus</span>
+        <span class="skill-chip">ORCAD PSpice</span>
+        <span class="skill-chip">Simulink</span>
+      </div>
+    </div>
+
+    <!-- Protocols -->
+    <div class="skill-category accent-copper reveal">
+      <div class="skill-cat-header">
+        <div class="skill-cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+
+        <span class="skill-cat-count">7</span>
+      </div>
+
+      <div class="skill-cat-title">Communication</div>
+
+      <div class="skill-items">
+        <span class="skill-chip">SPI</span>
+        <span class="skill-chip">I²C</span>
+        <span class="skill-chip">UART</span>
+        <span class="skill-chip">CAN</span>
+        <span class="skill-chip">BLE</span>
+        <span class="skill-chip">NFC (ISO15693)</span>
+        <span class="skill-chip">AXI4-Lite</span>
+      </div>
+    </div>
+
+    <!-- Tools -->
+    <div class="skill-category reveal">
+      <div class="skill-cat-header">
+        <div class="skill-cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+
+        <span class="skill-cat-count">8</span>
+      </div>
+
+      <div class="skill-cat-title">Development Tools</div>
+
+      <div class="skill-items">
+        <span class="skill-chip">STM32CubeIDE</span>
+        <span class="skill-chip">STM32CubeMX</span>
+        <span class="skill-chip">Android Studio</span>
+        <span class="skill-chip">VS Code</span>
+        <span class="skill-chip">MPLAB X</span>
+        <span class="skill-chip">Git / GitHub / Gitlab</span>
+        <span class="skill-chip">Jupyter</span>
+        <span class="skill-chip">Linux</span>
+      </div>
+    </div>
+
+    <!-- Mobile -->
+    <div class="skill-category accent-copper reveal">
+      <div class="skill-cat-header">
+        <div class="skill-cat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+          </svg>
+        </div>
+
+        <span class="skill-cat-count">6</span>
+      </div>
+
+      <div class="skill-cat-title">Mobile & Backend</div>
+
+      <div class="skill-items">
+        <span class="skill-chip">Flutter</span>
+        <span class="skill-chip">Android (Kotlin)</span>
+        <span class="skill-chip">FastAPI</span>
+        <span class="skill-chip">REST APIs</span>
+        <span class="skill-chip">SQLite</span>
+        <span class="skill-chip">BLE Integration</span>
+      </div>
+    </div>
+
+  </div>
+</section>
 
   <!-- ══ CONTACT ════════════════════════════════════════════════════ -->
   <section class="section" id="contact">
@@ -2082,6 +2461,7 @@ const projects = [
   {
     num: 'PROJ_01',
     title: '32-bit RISC-V Processor Design in VHDL',
+    img: 'riscV.png',
     desc: `<p>A complete implementation of the RV32I base instruction set architecture in VHDL, targeting FPGA deployment via Quartus Prime.</p>
            <ul>
              <li>Designed and implemented a fully functional RV32I processor supporting all core RISC-V base instructions.</li>
@@ -2094,6 +2474,7 @@ const projects = [
   {
     num: 'PROJ_02',
     title: 'SoC Synthesis & Smartwatch Programming on FPGA',
+    img: 'digital_watch.png',
     desc: `<p>End-to-end synthesis of a System-on-Chip running a soft-core NIOS II processor on the Altera DE1 FPGA board, then programming embedded applications on it.</p>
            <ul>
              <li>Used Altera SoPC Builder (QSys) to instantiate and connect the NIOS II processor with on-chip memory, PIO peripherals, and timer modules.</li>
@@ -2106,6 +2487,7 @@ const projects = [
   {
     num: 'PROJ_03',
     title: 'NFC OTA Firmware Update System for STM32',
+    img: 'nfc.jpg',
     desc: `<p>A full-stack firmware update pipeline enabling over-the-air updates to STM32 microcontrollers via NFC, eliminating the need for physical programming tools.</p>
            <ul>
              <li>STM32 bootloader with A/B dual-slot architecture (ping-pong), using flash memory layout and Boot Control Block (BCB) for reliable update triggering via NVIC_SystemReset().</li>
@@ -2119,6 +2501,7 @@ const projects = [
   {
     num: 'PROJ_04',
     title: 'Anomaly Detection for Industry 4.0',
+    img: 'anomalie.png',
     desc: `<p>A machine learning-based anomaly detection system monitoring a robotic arm using distributed edge computing across ESP32 and Raspberry Pi.</p>
            <ul>
              <li>Sensor network attached to a robotic arm for real-time motion tracking and vibration data collection.</li>
@@ -2131,6 +2514,7 @@ const projects = [
   {
     num: 'PROJ_05',
     title: 'IoT-Based Smart Agriculture System',
+    img: 'blynk.png',
     desc: `<p>An autonomous smart agriculture monitoring system with real-time cloud connectivity and mobile control dashboard.</p>
            <ul>
              <li>Multi-sensor data acquisition (temperature, humidity, soil moisture, light) using ESP32 microcontrollers.</li>
@@ -2139,7 +2523,41 @@ const projects = [
              <li>Mobile dashboard providing remote monitoring and manual override capability.</li>
            </ul>`,
     tags: ['ESP32', 'Sensors', 'Blynk', 'Cloud IoT', 'MQTT', 'Embedded C', 'Mobile']
-  }
+  },
+  {
+    num: 'PROJ_06',
+    title: 'RoboNexus – Smart Robot Marketplace & IoT Dashboard',
+    img: 'robonexus.png',
+    desc: `<p>A full-stack web platform enabling users to purchase, customize, and monitor robots through a real-time IoT dashboard.</p>
+          <ul>
+            <li>Developed a responsive web application with robot catalog, customization, and order management features.</li>
+            <li>Implemented a Node.js/Express backend with MySQL for secure data storage and RESTful APIs.</li>
+            <li>Integrated simulated ESP32 sensor data to provide live robot monitoring through an interactive dashboard.</li>
+            <li>Applied secure development practices including SQL injection prevention and protected user authentication.</li>
+          </ul>`,
+    tags: ['Node.js', 'Express.js', 'MySQL', 'JavaScript', 'HTML/CSS', 'ESP32', 'REST API']
+  },
+  {
+    num: 'PROJ_07',
+    title: 'Luna – AI Smart Glasses for the Visually Impaired',
+    img: 'luna.png',
+    desc: `<p>An embedded AI wearable designed to assist visually impaired users through real-time computer vision, obstacle detection, and voice interaction.</p>
+          <ul>
+            <li>Developed dual operating modes for obstacle avoidance and voice-activated object search using a custom-trained YOLOv5 model.</li>
+            <li>Integrated Raspberry Pi, Arduino, ultrasonic sensors, sound sensor, buzzer, and dual-axis servo motors into a unified embedded system.</li>
+            <li>Implemented real-time object tracking, distance estimation, clap-based device recovery, and multithreaded sensor processing.</li>
+            <li>Awarded <strong>3rd Place</strong> at the MARC Hackathon 2025 for innovation in assistive AI technologies.</li>
+          </ul>`,
+    tags: [
+      'Python',
+      'YOLOv5',
+      'Raspberry Pi',
+      'Arduino',
+      'Computer Vision',
+      'Embedded Systems',
+      'OpenCV'
+    ]
+  },
 ];
 
 function openModal(i) {
@@ -2149,9 +2567,35 @@ function openModal(i) {
   document.getElementById('modal-desc').innerHTML = p.desc;
   const tagsEl = document.getElementById('modal-tags');
   tagsEl.innerHTML = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+  // NEW: swap the real photo in (or clear it out) every time the
+  // modal opens, since the same #modal-img div is reused for every
+  // project — without this, an old image (or none at all) would
+  // just stay there from the previous project you clicked.
+  const modalImgBox = document.getElementById('modal-img');
+  modalImgBox.classList.toggle('has-photo', !!p.img);
+  const existingImg = modalImgBox.querySelector('img');
+  if (existingImg) existingImg.remove();
+  if (p.img) {
+    const imgEl = document.createElement('img');
+    imgEl.src = p.img;
+    imgEl.alt = p.title;
+    modalImgBox.appendChild(imgEl);
+  }
+
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
+
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 function closeModal() {
   document.getElementById('modal-overlay').classList.remove('open');
   document.body.style.overflow = '';
@@ -2298,6 +2742,27 @@ document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
   resize();
   requestAnimationFrame(draw);
 })();
+
+let currentLang = 'en';
+
+function applyLang(lang) {
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const text = el.getAttribute(`data-${lang}`);
+    if (text !== null) el.textContent = text;
+  });
+  document.querySelectorAll('.lang-option').forEach(el => {
+    el.classList.toggle('active', el.dataset.lang === lang);
+  });
+  document.documentElement.lang = lang;
+  localStorage?.setItem?.('portfolio-lang', lang); // optional, remembers choice — skip if you don't want storage
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'fr' : 'en';
+  applyLang(currentLang);
+}
+
+applyLang(currentLang);
 </script>
 </body>
 </html>
