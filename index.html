@@ -434,16 +434,21 @@
       border: none;
       transition: all .2s;
     }
-    .btn-primary {
+    .btn-ct-timary {
       background: var(--copper);
       color: #fff;
     }
-    .btn-primary:hover { background: #9c481a; box-shadow: 0 4px 18px var(--copper-line); }
-    .btn-outline {
-      background: transparent;
-      color: var(--copper);
-      border: 1px solid var(--copper);
+    .btn.btn-primary {
+      background: var(--copper);
+      border-color: var(--copper);
+      color: #fff;
     }
+
+    .btn.btn-primary:hover {
+      background: #9c481a;
+      border-color: #9c481a;
+    }
+
     .btn-outline:hover { background: var(--copper-dim); }
 
     /* Quick-stats strip — fills the empty space under the CTAs */
@@ -964,14 +969,43 @@
       letter-spacing: 2px;
       margin-bottom: 6px;
     }
-    .project-title {
-      font-family: var(--font-disp);
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--navy);
-      margin-bottom: 8px;
-      line-height: 1.3;
+    .project-title-row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:8px;
     }
+
+    .project-title{
+      flex:1;
+      font-family:var(--font-disp);
+      font-size:17px;
+      font-weight:600;
+      color:var(--navy);
+      line-height:1.3;
+    }
+
+    .project-github{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#000; /* Black */
+      transition:color .2s;
+      flex-shrink:0;
+    }
+
+    .project-github:hover{
+      color:var(--copper);
+    }
+
+    .project-github svg{
+      width:16px;
+      height:16px;
+      stroke:currentColor;
+      fill:none;
+    }
+    
     .project-excerpt {
       font-size: 13px;
       color: var(--text-mid);
@@ -998,7 +1032,60 @@
       border-radius: 2px;
       letter-spacing: .5px;
     }
+    .modal-footer {
+      display: flex;
+      justify-content: flex-start; /* left side */
+      align-items: center;
+      gap: 10px;
+      padding: 16px 22px;
+      border-top: 1px solid var(--border);
+    }
 
+    /* Common button style */
+    .modal-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 13px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .5px;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: all .2s ease;
+    }
+
+    /* GitHub button */
+    .modal-github {
+      background: transparent;
+      color: #111;
+      border: 1px solid var(--border);
+    }
+
+    .modal-github svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .modal-github:hover {
+      color: var(--copper);
+      border-color: var(--copper);
+      background: var(--copper-dim);
+    }
+
+
+    /* Demo button */
+    .modal-demo {
+      background: var(--copper);
+      color: #fff;
+      border: 1px solid var(--copper);
+    }
+
+    .modal-demo:hover {
+      background: #9c481a;
+      box-shadow: 0 4px 18px var(--copper-line);
+    }
+    
     /* ─── BEYOND THE CLASSROOM (hackathons + teaching) ───────────── */
     
     #beyond { min-height: auto; }
@@ -1359,7 +1446,9 @@
 
     .modal-img-icon { position: relative; z-index: 1; }
     .modal-img-icon svg { width: 44px; height: 44px; stroke: var(--copper); opacity: .6; }
-    .modal-body { padding: 28px 32px; }
+    .modal-body {
+      padding: 20px 32px 8px;
+    }
     .modal-number {
       font-family: var(--font-mono);
       font-size: 11px;
@@ -2000,7 +2089,31 @@
         </div>
         <div class="project-body">
           <div class="project-number">// PROJ_01</div>
-          <div class="project-title">32-bit RISC-V Processor in VHDL</div>
+            <div class="project-title-row">
+              <div class="project-title">
+                32-bit RISC-V Processor in VHDL
+              </div>
+
+              <a href="https://github.com/abdelah202"
+                class="project-github"
+                target="_blank"
+                onclick="event.stopPropagation();"
+                aria-label="GitHub Repository">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61
+                          c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77
+                          5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48
+                          a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1
+                          5.09 1A5.07 5.07 0 0 0 5 4.77
+                          5.44 5.44 0 0 0 3.5 8.52c0 5.42
+                          3.3 6.61 6.44 7A3.37 3.37 0 0 0 9
+                          18.13V22"/>
+                </svg>
+
+              </a>
+            </div>
           <div class="project-excerpt">Full RV32I processor implementation with modular functional units, ALU, register file, and simulation-based validation.</div>
           <div class="project-tags">
             <span class="tag">VHDL</span><span class="tag">SystemVerilog</span><span class="tag">RISC-V</span><span class="tag">Quartus</span><span class="tag">ModelSim</span>
@@ -2014,7 +2127,31 @@
         </div>
         <div class="project-body">
           <div class="project-number">// PROJ_02</div>
-          <div class="project-title">SoC Synthesis & Smartwatch</div>
+          <div class="project-title-row">
+            <div class="project-title">
+              SoC Synthesis & Digital Watch
+            </div>
+
+            <a href="https://github.com/abdelah202/Smartwatch-DE1"
+              class="project-github"
+              target="_blank"
+              onclick="event.stopPropagation();"
+              aria-label="GitHub Repository">
+
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61
+                        c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77
+                        5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48
+                        a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1
+                        5.09 1A5.07 5.07 0 0 0 5 4.77
+                        5.44 5.44 0 0 0 3.5 8.52c0 5.42
+                        3.3 6.61 6.44 7A3.37 3.37 0 0 0 9
+                        18.13V22"/>
+              </svg>
+
+            </a>
+          </div>
           <div class="project-excerpt">NIOS II soft-core processor synthesized on Altera DE1 FPGA via SoPC Builder, running timer and clock applications.</div>
           <div class="project-tags">
             <span class="tag">FPGA</span><span class="tag">VHDL</span><span class="tag">NIOS II</span><span class="tag">QSys</span><span class="tag">Embedded C</span>
@@ -2103,7 +2240,27 @@
 
         <div class="project-body">
           <div class="project-number">// PROJ_07</div>
-          <div class="project-title">Luna – AI Smart Glasses for the Visually Impaired</div>
+          
+          <div class="project-title-row">
+            <div class="project-title">
+              32-bit RISC-V Processor in VHDL
+            </div>
+
+            <a href="https://github.com/abdelah202"
+              class="project-github"
+              target="_blank"
+              onclick="event.stopPropagation();"
+              aria-label="GitHub Repository">
+
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+
+            </a>
+          </div>
           <div class="project-excerpt">
             Wearable embedded AI assistant combining computer vision, voice commands, and sensor fusion to assist visually impaired users with navigation and object localization.
           </div>
@@ -2452,6 +2609,9 @@
       <div class="modal-section-title">Technologies Used</div>
       <div class="modal-tags" id="modal-tags"></div>
     </div>
+
+    <div class="modal-footer" id="modal-footer"></div>
+  
   </div>
 </div>
 
@@ -2469,7 +2629,9 @@ const projects = [
              <li>Full simulation-based validation using ModelSim with directed testbenches covering edge cases and instruction sequences.</li>
              <li>SystemVerilog used for testbench infrastructure; VHDL for all RTL design.</li>
            </ul>`,
-    tags: ['VHDL', 'SystemVerilog', 'RISC-V', 'Quartus Prime', 'ModelSim', 'RTL Design']
+    tags: ['VHDL', 'SystemVerilog', 'RISC-V', 'Quartus Prime', 'ModelSim', 'RTL Design'],
+    github:"https://github.com/yourname/riscv",
+    demo:"https://github.com/yourname/riscv"
   },
   {
     num: 'PROJ_02',
@@ -2482,7 +2644,8 @@ const projects = [
              <li>Developed timer and digital clock firmware in Embedded C running directly on the NIOS II architecture.</li>
              <li>Demonstrated hardware-software co-design by modifying both the hardware platform and the firmware to add features.</li>
            </ul>`,
-    tags: ['FPGA', 'VHDL', 'NIOS II', 'QSys', 'Embedded C', 'Quartus Prime', 'Altera DE1']
+    tags: ['FPGA', 'VHDL', 'NIOS II', 'QSys', 'Embedded C', 'Quartus Prime', 'Altera DE1'],
+    github:"https://github.com/abdelah202/Smartwatch-DE1",
   },
   {
     num: 'PROJ_03',
@@ -2556,7 +2719,8 @@ const projects = [
       'Computer Vision',
       'Embedded Systems',
       'OpenCV'
-    ]
+    ],
+    demo:"https://drive.google.com/file/d/1ONAiQOLkD-0WdsRPEqAvrBtFy_Sh-C4J/view?usp=sharing"
   },
 ];
 
@@ -2568,6 +2732,45 @@ function openModal(i) {
   const tagsEl = document.getElementById('modal-tags');
   tagsEl.innerHTML = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
 
+  // Modal footer buttons
+  const footerEl = document.getElementById('modal-footer');
+  footerEl.innerHTML = '';
+
+  if (p.github) {
+    footerEl.innerHTML += `
+      <a href="${p.github}" target="_blank" class="modal-btn modal-github">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38
+          .6.11.82-.26.82-.58v-2.04c-3.34.73-4.04-1.61-4.04-1.61
+          -.55-1.4-1.33-1.77-1.33-1.77-1.09-.74.08-.73.08-.73
+          1.2.08 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99
+          .11-.77.42-1.3.76-1.6-2.66-.3-5.46-1.33-5.46-5.92
+          0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17
+          0 0 1-.32 3.3 1.23A11.5 11.5 0 0112 5.8c1.02 0 2.04.14
+          3 .42 2.3-1.55 3.3-1.23 3.3-1.23.65 1.65.24 2.87.12 3.17
+          .77.84 1.23 1.91 1.23 3.22 0 4.6-2.8 5.62-5.47 5.92
+          .43.37.82 1.1.82 2.22v3.29c0 .32.22.7.83.58A12
+          12 0 0024 12C24 5.37 18.63 0 12 0z"/>
+        </svg>
+        View on GitHub
+      </a>
+    `;
+  }
+
+  if (p.demo) {
+  footerEl.innerHTML += `
+    <a href="${p.demo}" target="_blank" class="modal-btn modal-demo">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+      View Demo
+    </a>
+  `;
+}
   // NEW: swap the real photo in (or clear it out) every time the
   // modal opens, since the same #modal-img div is reused for every
   // project — without this, an old image (or none at all) would
