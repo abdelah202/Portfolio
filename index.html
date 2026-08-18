@@ -2000,8 +2000,49 @@
             </div>
           </div>
           <ul class="exp-bullets">
-            <li>Designed and implemented a firmware update solution over NFC for STM32-based embedded systems, ensuring reliable and secure update delivery.</li>
-            <li>Developed an Android application (Flutter) and contributed to a centralized update management system for version control and deployment handling.</li>
+            <li>
+              <strong>Designed and implemented an end-to-end firmware update solution over NFC</strong>
+              for STM32-based embedded systems. The solution combines a custom STM32 bootloader,
+              an ST25DV NFC interface, a Flutter Android application, and a FastAPI backend to
+              enable reliable local firmware updates without physical access to the device.
+            </li>
+
+            <li>
+              <strong>Developed the STM32 bootloader and OTA update protocol</strong>, including
+              firmware metadata management, chunk-based data transfer, Flash memory programming,
+              update state management, error handling, and CRC32-based integrity verification.
+              The protocol was designed around the constraints of the ST25DV Fast Transfer Mode
+              and the limited memory resources of the microcontroller.
+            </li>
+
+            <li>
+              <strong>Developed a Flutter-based Android maintenance application</strong> to
+              automate the complete update workflow: NFC device detection and identification,
+              firmware version retrieval, firmware download, data fragmentation, sequential NFC
+              transmission, bootloader response handling, progress monitoring, and final update
+              status reporting.
+            </li>
+
+            <li>
+              <strong>Developed a FastAPI backend and database</strong> for centralized firmware
+              management, including firmware storage, version control, metadata management,
+              CRC information, and device/project-specific firmware distribution to the mobile
+              application.
+            </li>
+
+            <li>
+              <strong>Designed and integrated the complete system architecture</strong> spanning
+              the embedded firmware, NFC communication layer, Android application, and backend.
+              The solution was tested and validated on the target STM32/ST25DV hardware platform
+              to ensure correct end-to-end firmware transfer and installation.
+            </li>
+
+            <li>
+              <strong>Integrated cybersecurity considerations inspired by the EU Cyber Resilience
+              Act (CRA)</strong>, with particular attention to firmware integrity and secure update
+              mechanisms. The architecture was designed with further security measures in mind,
+              including firmware authentication, anti-rollback protection, secure boot, and firmware encryption.
+            </li> 
           </ul>
         </div>
       </div>
@@ -2093,26 +2134,6 @@
               <div class="project-title">
                 32-bit RISC-V Processor in VHDL
               </div>
-
-              <a href="https://github.com/abdelah202"
-                class="project-github"
-                target="_blank"
-                onclick="event.stopPropagation();"
-                aria-label="GitHub Repository">
-
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61
-                          c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77
-                          5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48
-                          a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1
-                          5.09 1A5.07 5.07 0 0 0 5 4.77
-                          5.44 5.44 0 0 0 3.5 8.52c0 5.42
-                          3.3 6.61 6.44 7A3.37 3.37 0 0 0 9
-                          18.13V22"/>
-                </svg>
-
-              </a>
             </div>
           <div class="project-excerpt">Full RV32I processor implementation with modular functional units, ALU, register file, and simulation-based validation.</div>
           <div class="project-tags">
@@ -2131,7 +2152,6 @@
             <div class="project-title">
               SoC Synthesis & Digital Watch
             </div>
-
             <a href="https://github.com/abdelah202/Smartwatch-DE1"
               class="project-github"
               target="_blank"
@@ -2149,7 +2169,6 @@
                         3.3 6.61 6.44 7A3.37 3.37 0 0 0 9
                         18.13V22"/>
               </svg>
-
             </a>
           </div>
           <div class="project-excerpt">NIOS II soft-core processor synthesized on Altera DE1 FPGA via SoPC Builder, running timer and clock applications.</div>
@@ -2183,7 +2202,28 @@
         </div>
         <div class="project-body">
           <div class="project-number">// PROJ_04</div>
-          <div class="project-title">Anomaly Detection — Industry 4.0</div>
+          <div class="project-title-row">
+            <div class="project-title">
+              Anomaly Detection — Industry 4.0
+            </div>
+            <a href="https://github.com/abdelah202/Smart-IoT-Industrial-Monitoring-Predictive-Maintenance"
+            class="project-github"
+            target="_blank"
+            onclick="event.stopPropagation();"
+            aria-label="GitHub Repository">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61
+                        c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77
+                        5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48
+                        a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1
+                        5.09 1A5.07 5.07 0 0 0 5 4.77
+                        5.44 5.44 0 0 0 3.5 8.52c0 5.42
+                        3.3 6.61 6.44 7A3.37 3.37 0 0 0 9
+                        18.13V22"/>
+              </svg>
+            </a>
+          </div>
           <div class="project-excerpt">Robotic arm monitoring with sensor fusion and Random Forest-based early failure detection.</div>
           <div class="project-tags">
             <span class="tag">ESP32</span><span class="tag">Raspberry Pi</span><span class="tag">Python</span><span class="tag">Random Forest</span>
@@ -2216,7 +2256,28 @@
 
         <div class="project-body">
           <div class="project-number">// PROJ_06</div>
-          <div class="project-title">RoboNexus – Smart Robot Marketplace & IoT Dashboard</div>
+          <div class="project-title-row">
+            <div class="project-title">
+              RoboNexus – Smart Robot Marketplace & IoT Dashboard
+            </div>
+            <a href="https://github.com/abdelah202/Robonexus"
+            class="project-github"
+            target="_blank"
+            onclick="event.stopPropagation();"
+            aria-label="GitHub Repository">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61
+                        c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77
+                        5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48
+                        a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1
+                        5.09 1A5.07 5.07 0 0 0 5 4.77
+                        5.44 5.44 0 0 0 3.5 8.52c0 5.42
+                        3.3 6.61 6.44 7A3.37 3.37 0 0 0 9
+                        18.13V22"/>
+              </svg>
+            </a>
+          </div>          
           <div class="project-excerpt">
             Full-stack web platform for robot customization, online purchasing, and real-time IoT monitoring through an interactive dashboard.
           </div>
@@ -2620,7 +2681,7 @@
 const projects = [
   {
     num: 'PROJ_01',
-    title: '32-bit RISC-V Processor Design in VHDL',
+    title: '32-bit RISC-V Processor Design in VHDL (In Progress)',
     img: 'riscV.png',
     desc: `<p>A complete implementation of the RV32I base instruction set architecture in VHDL, targeting FPGA deployment via Quartus Prime.</p>
            <ul>
@@ -2630,8 +2691,6 @@ const projects = [
              <li>SystemVerilog used for testbench infrastructure; VHDL for all RTL design.</li>
            </ul>`,
     tags: ['VHDL', 'SystemVerilog', 'RISC-V', 'Quartus Prime', 'ModelSim', 'RTL Design'],
-    github:"https://github.com/yourname/riscv",
-    demo:"https://github.com/yourname/riscv"
   },
   {
     num: 'PROJ_02',
@@ -2672,7 +2731,8 @@ const projects = [
              <li>Random Forest classifier trained on labeled normal/anomalous motion sequences for early failure detection.</li>
              <li>Alert system triggered on anomaly detection, enabling predictive maintenance workflows.</li>
            </ul>`,
-    tags: ['ESP32', 'Raspberry Pi', 'Python', 'Random Forest', 'scikit-learn', 'Sensors', 'Edge ML']
+    tags: ['ESP32', 'Raspberry Pi', 'Python', 'Random Forest', 'scikit-learn', 'Sensors', 'Edge ML'],       
+    github:"https://github.com/abdelah202/Smart-IoT-Industrial-Monitoring-Predictive-Maintenance"
   },
   {
     num: 'PROJ_05',
@@ -2698,7 +2758,8 @@ const projects = [
             <li>Integrated simulated ESP32 sensor data to provide live robot monitoring through an interactive dashboard.</li>
             <li>Applied secure development practices including SQL injection prevention and protected user authentication.</li>
           </ul>`,
-    tags: ['Node.js', 'Express.js', 'MySQL', 'JavaScript', 'HTML/CSS', 'ESP32', 'REST API']
+    tags: ['Node.js', 'Express.js', 'MySQL', 'JavaScript', 'HTML/CSS', 'ESP32', 'REST API'],
+    github:"https://github.com/abdelah202/Robonexus"
   },
   {
     num: 'PROJ_07',
