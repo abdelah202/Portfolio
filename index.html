@@ -1580,7 +1580,7 @@
       main { margin-left: 0; padding: 0 32px; }
 
       .home-grid { grid-template-columns: 1fr; gap: 44px; }
-      .home-photo-wrap { order: -1; }
+      .home-photo-wrap { order: -1; margin-top: 28px; }
       .photo-frame { width: 220px; height: 220px; }
       .photo-img { width: 220px; height: 220px; }
       .photo-chip { display: none; }
@@ -1611,6 +1611,7 @@
       .home-bio { margin-left: auto; margin-right: auto; }
       .cta-row { justify-content: center; }
       .home-stats { margin: 0 auto; max-width: 420px; }
+      .home-photo-wrap { margin-top: 20px; }
       .photo-frame { width: 180px; height: 180px; }
       .photo-img { width: 180px; height: 180px; }
 
@@ -1656,6 +1657,19 @@
       .modal-body { padding: 18px 20px 4px; }
       .modal-title { font-size: 21px; }
       .modal-footer { flex-wrap: wrap; padding: 14px 20px; }
+
+      /* FIX: the close button used to live inside the scrolling
+         header, so it disappeared once you scrolled down to read
+         the description — position:fixed keeps it pinned to the
+         screen corner regardless of scroll position. */
+      .modal-close {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 210;
+        background: var(--bg2);
+        box-shadow: 0 4px 16px rgba(22,35,58,.2);
+      }
     }
 
     /* ═══════════════════════════════════════════════════════════
