@@ -2057,11 +2057,11 @@
           <img src="logo_coursera.png" alt="Coursera / CU Boulder">
         </div>
         <div class="cert-body">
-          <div class="cert-name">Embedded Software and Hardware Architecture</div>
+          <div class="cert-name">Linux Kernel Programming and Introduction to Yocto Project</div>
           <div class="cert-issuer">University of Colorado Boulder</div>
           <div class="cert-date">(In Progress)</Progress></div>
           <div class="cert-skills">
-            <span class="cert-skill">Embedded C & ARM Architecture</span>
+            <span class="cert-skill">Embedded Linux & Yocto Project</span>
           </div>
           <!-- Replace href with your Coursera "Show credential" link -->
           <!-- <a class="cert-link" href="#" target="_blank" rel="noopener">View credential ↗</a>-->
@@ -2179,55 +2179,51 @@
           </div>
           <ul class="exp-bullets">
             <li>
-              <strong>Designed and implemented an end-to-end firmware update solution over NFC</strong>
-              for STM32-based embedded systems. The solution combines a custom STM32 bootloader,
-              an ST25DV NFC interface, a Flutter Android application, and a FastAPI backend to
-              enable reliable local firmware updates without physical access to the device.
+              <strong>Designed and implemented an end-to-end OTA update solution over NFC</strong>
+              for STM32 microcontrollers — custom bootloader, ST25DV NFC interface, Flutter
+              Android app, and FastAPI backend — enabling field firmware updates with no
+              physical device access.
             </li>
 
             <li>
-              <strong>Developed the STM32 bootloader and OTA update protocol</strong>, including
-              firmware metadata management, chunk-based data transfer, Flash memory programming,
-              update state management, error handling, and CRC32-based integrity verification.
-              The protocol was designed around the constraints of the ST25DV Fast Transfer Mode
-              and the limited memory resources of the microcontroller.
+              <strong>Evaluated BLE, Wi-Fi, and NFC against power, cost, and infrastructure constraints</strong>,
+              selecting NFC for its infrastructure-free, low-power short-range fit; designed the
+              Flash memory layout (bootloader / BCB / firmware slots) around page-erase and
+              8-byte programming constraints.
             </li>
 
             <li>
-              <strong>Developed a Flutter-based Android maintenance application</strong> to
-              automate the complete update workflow: NFC device detection and identification,
-              firmware version retrieval, firmware download, data fragmentation, sequential NFC
-              transmission, bootloader response handling, progress monitoring, and final update
-              status reporting.
+              <strong>Engineered a custom transfer protocol over ST25DV Fast Transfer Mode</strong>
+              with chunked frames, ACKs, and selective retransmission, tuning payload size
+              against the 256-byte mailbox limit to maximize throughput within hardware
+              constraints.
             </li>
 
             <li>
-              <strong>Developed a FastAPI backend and database</strong> for centralized firmware
-              management, including firmware storage, version control, metadata management,
-              CRC information, and device/project-specific firmware distribution to the mobile
-              application.
+              <strong>Synchronized data transfer across the ST25DV's dual interfaces</strong>,
+              coordinating I²C-side interrupt-driven reception on the STM32 with RF-side mailbox
+              polling from the Android app to keep both ends consistent despite the chip's
+              asynchronous, dual-port access model.
             </li>
 
             <li>
-              <strong>Designed and integrated the complete system architecture</strong> spanning
-              the embedded firmware, NFC communication layer, Android application, and backend.
-              The solution was tested and validated on the target STM32/ST25DV hardware platform
-              to ensure correct end-to-end firmware transfer and installation.
+              <strong>Built reliability end-to-end</strong>: CRC32 integrity checks kept
+              consistent across C firmware, Python backend, and Dart app, with persistent
+              update-state tracking and error recovery on both bootloader and application sides.
             </li>
 
             <li>
-              <strong>Integrated cybersecurity considerations inspired by the EU Cyber Resilience
-              Act (CRA)</strong>, with particular attention to firmware integrity and secure update
-              mechanisms. The architecture was designed with further security measures in mind,
-              including firmware authentication, anti-rollback protection, secure boot, and firmware encryption.
-            </li> 
+              <strong>Validated on target hardware</strong> (J-Link, oscilloscope) and designed
+              with EU Cyber Resilience Act (CRA) requirements in mind — planning firmware
+              authentication, anti-rollback, secure boot, and encryption as follow-on hardening.
+            </li>
           </ul>
         </div>
       </div>
 
       <div class="exp-card reveal">
         <div class="exp-logo">
-          <img src="logo_tima.svg" alt="TIMA Laboratory"> 
+          <img src="logo_tima.svg" alt="TIMA Laboratory">
         </div>
         <div class="exp-main">
           <div class="exp-header">
@@ -2241,8 +2237,30 @@
             </div>
           </div>
           <ul class="exp-bullets">
-            <li>Designed and implemented a digital Phase-Locked Loop (PLL) for IoT backscattering systems.</li>
-            <li>Conducted control-loop analysis and Verilog-based optimization targeting low power and reduced hardware footprint.</li>
+            <li>
+              <strong>Designed a digital Phase-Locked Loop (PLL) for RF-powered IoT backscattering systems</strong>,
+              maximizing the digital fraction of the loop (phase detection, loop filtering, oscillator control)
+              to improve PVT robustness and portability across CMOS nodes.
+            </li>
+            <li>
+              <strong>Benchmarked phase/frequency detection techniques</strong> (XOR, bang-bang, PFD, TDC)
+              against capture range, resolution, and power trade-offs, motivating a hybrid detection strategy
+              to combine fast frequency acquisition with fine near-lock phase resolution.
+            </li>
+            <li>
+              <strong>Modeled and compared digital loop filter architectures</strong> (integrator-only, PI, IIR)
+              through discrete-time control-loop analysis, arbitrating lock time, jitter/phase-noise performance,
+              and hardware complexity for an ultra-low-power target.
+            </li>
+            <li>
+              <strong>Evaluated oscillator architectures</strong> (DAC-controlled VCO, LC-DCO, ring oscillator, NCO)
+              on power, area, and phase-noise criteria to steer the design toward a fully-digital, CMOS-scalable
+              implementation.
+            </li>
+            <li>
+              <strong>Implemented and optimized the resulting PLL architecture in Verilog</strong>, reducing
+              hardware footprint and power consumption for energy-harvesting-powered IoT devices.
+            </li>
           </ul>
         </div>
       </div>
@@ -2511,6 +2529,53 @@
             <span class="tag">Raspberry Pi</span>
             <span class="tag">YOLOv5</span>
             <span class="tag">Computer Vision</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" onclick="openModal(7)">
+        <div class="project-img">
+          <div class="project-img has-photo">
+            <img src="mlp-unix.jpeg" alt="MLP Neural Network in C under Unix">
+          </div>
+        </div>
+
+        <div class="project-body">
+          <div class="project-number">// PROJ_09</div>
+
+          <div class="project-title-row">
+            <div class="project-title">
+              Multithreaded MLP – C & Unix Systems Programming
+            </div>
+
+            <a href="https://github.com/abdelah202"
+              class="project-github"
+              target="_blank"
+              onclick="event.stopPropagation();"
+              aria-label="GitHub Repository">
+
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+
+            </a>
+          </div>
+
+          <div class="project-excerpt">
+            Multilayer Perceptron implemented in C under Ubuntu, exploring Unix
+            process/thread management, inter-process communication, synchronization,
+            and shared-memory mechanisms.
+          </div>
+
+          <div class="project-tags">
+            <span class="tag">C</span>
+            <span class="tag">Unix/Linux</span>
+            <span class="tag">POSIX Threads</span>
+            <span class="tag">IPC</span>
+            <span class="tag">Shared Memory</span>
           </div>
         </div>
       </div>
@@ -2999,6 +3064,47 @@ const projects = [
     'Embedded Systems'
     ],
     demo: "https://drive.google.com/file/d/1ONAiQOLkD-0WdsRPEqAvrBtFy_Sh-C4J/view?usp=sharing"
+  },
+  {
+    num: 'PROJ_08',
+    title: 'Multithreaded MLP – C & Unix Systems Programming',
+    img: 'mlp-unix.jpeg',
+
+    desc: `
+    <p>
+      Multilayer Perceptron implemented from scratch in C under Ubuntu,
+      combining neural-network computation with Unix systems programming
+      mechanisms for concurrent execution, inter-process communication,
+      and synchronization.
+    </p>
+    <ul>
+      <li>Implemented a <strong>Multilayer Perceptron (MLP)</strong> in C, including the core neural-network computation and processing pipeline.</li>
+      <li>Designed concurrent execution using <strong>Unix processes and POSIX threads</strong> to distribute computational tasks.</li>
+      <li>Implemented <strong>pipes and named pipes (FIFOs)</strong> for communication between processes.</li>
+      <li>Used <strong>Unix signals</strong> for asynchronous event and process communication.</li>
+      <li>Implemented <strong>semaphores</strong> for synchronization and coordination between concurrent execution units.</li>
+      <li>Used <strong>shared memory</strong> for efficient data exchange between processes.</li>
+      <li>Developed and tested the application in a <strong>Unix/Linux environment</strong> using C and system-level APIs.</li>
+    </ul>
+    `,
+
+    tags: [
+      'C',
+      'Unix/Linux',
+      'POSIX',
+      'Processes',
+      'Threads',
+      'IPC',
+      'Pipes',
+      'Named Pipes',
+      'Signals',
+      'Semaphores',
+      'Shared Memory',
+      'Multithreading',
+      'Systems Programming'
+    ],
+
+    demo: ""
   },
 ];
 
