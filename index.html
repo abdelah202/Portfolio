@@ -2180,42 +2180,48 @@
           <ul class="exp-bullets">
             <li>
               <strong>Designed and implemented an end-to-end OTA update solution over NFC</strong>
-              for STM32 microcontrollers — custom bootloader, ST25DV NFC interface, Flutter
-              Android app, and FastAPI backend — enabling field firmware updates with no
-              physical device access.
+              for STM32 microcontrollers — custom bootloader, ST25DV driver, Flutter Android
+              app, and FastAPI backend — enabling field firmware updates with no physical
+              device access.
             </li>
 
             <li>
-              <strong>Evaluated BLE, Wi-Fi, and NFC against power, cost, and infrastructure constraints</strong>,
-              selecting NFC for its infrastructure-free, low-power short-range fit; designed the
-              Flash memory layout (bootloader / BCB / firmware slots) around page-erase and
-              8-byte programming constraints.
+              <strong>Developed a C driver for the ST25DV NFC chip over I²C</strong> on top of
+              STM32 HAL: password-based session lock/unlock, mailbox (Fast Transfer Mode)
+              read/write, and system/dynamic register access with their distinct I²C
+              addressing, exposed through a clean API with HAL status-code error handling and
+              interrupt-driven (EXTI) event reception.
             </li>
 
             <li>
               <strong>Engineered a custom transfer protocol over ST25DV Fast Transfer Mode</strong>
               with chunked frames, ACKs, and selective retransmission, tuning payload size
-              against the 256-byte mailbox limit to maximize throughput within hardware
-              constraints.
+              against the 256-byte mailbox limit; synchronized the chip's dual interfaces
+              (I²C interrupts on the STM32 vs RF-side mailbox polling from the Android app)
+              to keep both ends consistent despite asynchronous dual-port access.
             </li>
 
             <li>
-              <strong>Synchronized data transfer across the ST25DV's dual interfaces</strong>,
-              coordinating I²C-side interrupt-driven reception on the STM32 with RF-side mailbox
-              polling from the Android app to keep both ends consistent despite the chip's
-              asynchronous, dual-port access model.
+              <strong>Designed a dual-slot A/B bootloader architecture</strong> and Flash layout
+              (bootloader / BCB / firmware slots) around page-erase and 8-byte programming
+              constraints, with a bootloader vector table exposing services to the application
+              at runtime; chose NFC over BLE and Wi-Fi after evaluating power, cost, and
+              infrastructure constraints.
             </li>
 
             <li>
               <strong>Built reliability end-to-end</strong>: CRC32 integrity checks kept
               consistent across C firmware, Python backend, and Dart app, with persistent
-              update-state tracking and error recovery on both bootloader and application sides.
+              update-state tracking, UID-based device validation, and error recovery on both
+              bootloader and application sides.
             </li>
 
             <li>
-              <strong>Validated on target hardware</strong> (J-Link, oscilloscope) and designed
-              with EU Cyber Resilience Act (CRA) requirements in mind — planning firmware
-              authentication, anti-rollback, secure boot, and encryption as follow-on hardening.
+              <strong>Validated on target hardware</strong> (J-Link, oscilloscope), debugging
+              low-level issues (I²C addressing, interrupt handling, linker-script RAM
+              boundaries); designed with EU Cyber Resilience Act (CRA) requirements in mind —
+              planning firmware authentication, anti-rollback, secure boot, and encryption as
+              follow-on hardening.
             </li>
           </ul>
         </div>
